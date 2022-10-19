@@ -1,9 +1,9 @@
 from collections import deque
 import heapq
 
-f = open("../supermarkt.txt", "w")
-fc = open("../supermarkt_customer.txt", "w")
-fs = open("../supermarkt_station.txt", "w")
+f = open("../../supermarkt.txt", "w")
+fc = open("../../supermarkt_customer.txt", "w")
+fs = open("../../supermarkt_station.txt", "w")
 
 
 # print on console and into supermarket log
@@ -55,6 +55,25 @@ class Ev:
 
 class EvQueue:
 # please implement here
+    q = []
+
+    time = 0
+    evCount = 0
+
+    def __int__(self):
+        q = []
+        heapq.heapify(q)
+
+    def push(ev):
+        heapq.heappush(EvQueue.q, ev)
+
+    def pop(self):
+        return heapq.heappop(EvQueue.q)
+
+    def start(self):
+        while(EvQueue.q.__len__() > 0):
+            ev = EvQueue.pop(self)
+            #ev.ereignisfunktion
 
 
 # class consists of
@@ -64,6 +83,14 @@ class EvQueue:
 # CustomerWaiting, busy: possible states of this station
 class Station():
 # please implement here
+    name = ""
+    buffer = []
+    delay_per_item = 0
+    customerWaiting = False
+
+    def __int__(self, d, n):
+        self.delay_per_item = d
+        self.name = n
 
 
 # class consists of
@@ -77,6 +104,9 @@ class Customer():
     duration_cond_complete = 0
     count = 0
 # please implement here
+
+    def __init__(self, ekList, name):
+
 
 
 
