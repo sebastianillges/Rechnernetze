@@ -103,6 +103,7 @@ class Customer():
     duration = 0
     duration_cond_complete = 0
     count = 0
+    name = ""
 # please implement here
 
     def __init__(self, ekList, name):
