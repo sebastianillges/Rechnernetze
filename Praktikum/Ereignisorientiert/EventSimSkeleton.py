@@ -127,8 +127,22 @@ class Customer():
     count = 0
 # please implement here
 
-    def __init__(self, ekList, name):
+    def __init__(self, ekList, name, startTime):
+        self.ekList = ekList
+        self.name = name
+        self.startTime = startTime
+        self.anzahlEk = 0
+        Customer.count += 1
 
+    def run(self):
+        t = self.ekList[self.anzahlEk][0]
+        ev = Ev(EvQueue.time + t, self.ankunft, prio=2)
+        return ev
+
+    def ankunft(self):
+        t = self.ekList[self.anzahlEk][2] * self.ekList[self.anzahlEk][3]
+        ev = Ev(EvQueue.time + t, self.verlassen, prio=1)
+        return ev
 
 
     def verlassen(self):
