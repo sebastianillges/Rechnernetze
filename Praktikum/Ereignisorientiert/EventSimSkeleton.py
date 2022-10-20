@@ -46,6 +46,15 @@ class Ev:
         self.prio = prio
         Ev.counter += 1
 
+    def __lt__(self, other):
+        return self.t < other.t
+    def __le__(self, other):
+        return self.t <= other.t
+    def __gt__(self, other):
+        return self.t > other.t
+    def __ge__(self, other):
+        return self.t >= other.t
+
 
 # class consists of
 # q: event queue
@@ -60,20 +69,25 @@ class EvQueue:
     time = 0
     evCount = 0
 
-    def __int__(self):
-        q = []
-        heapq.heapify(q)
+    def __init__(self):
+        heapq.heapify(self.q)
 
-    def push(ev):
-        heapq.heappush(EvQueue.q, ev)
+    def push(self, ev):
+        heapq.heappush(self.q, ev)
 
     def pop(self):
-        return heapq.heappop(EvQueue.q)
+        return heapq.heappop(self.q)
 
     def start(self):
-        while(EvQueue.q.__len__() > 0):
+        while EvQueue.q.__len__() > 0:
             ev = EvQueue.pop(self)
-            #ev.ereignisfunktion
+            EvQueue.time = ev.t
+
+            new_ev = ev.work()
+            if new_ev is not None:
+                self.push(new_ev)
+
+
 
 
 # class consists of
@@ -83,15 +97,23 @@ class EvQueue:
 # CustomerWaiting, busy: possible states of this station
 class Station():
 # please implement here
-    name = ""
-    buffer = []
-    delay_per_item = 0
-    customerWaiting = False
-
-    def __int__(self, d, n):
+    def __init__(self, d, n):
         self.delay_per_item = d
         self.name = n
+        self.buffer = []
+        self.CustomerWaiting = False
+        self.busy = False
 
+    def queue(self, kunde):
+        self.buffer.append(kunde)
+        self.CustomerWaiting = True
+
+    def abarbeiten(self):
+        kunde = self.buffer.pop()
+        self.busy = True
+        if self.buffer.__len__() is 0:
+            self.CustomerWaiting = False
+        kunde.served[self.name] = 1
 
 # class consists of
 # statistics variables
@@ -103,13 +125,17 @@ class Customer():
     duration = 0
     duration_cond_complete = 0
     count = 0
-    name = ""
 # please implement here
 
     def __init__(self, ekList, name):
 
 
 
+    def verlassen(self):
+        if self.anzahlEk < len(self.ekList) - 1:
+            self.anzahlEk += 1
+        ev = Ev(EvQueue.time, self.run, prio=2)
+        return ev
 
 def startCustomers(einkaufsliste, name, sT, dT, mT):
     i = 1
