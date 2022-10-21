@@ -83,9 +83,10 @@ class EvQueue:
             ev = EvQueue.pop(self)
             EvQueue.time = ev.t
 
-            new_ev = ev.work()
-            if new_ev is not None:
-                self.push(new_ev)
+            evN = ev.work()
+            while(evN is not None):
+                self.push(evN.pop(0))
+            
 
 
 
@@ -142,19 +143,35 @@ class Customer():
 
     def run(self):
         t = self.ekList[self.anzahlEk][0]
-        ev = Ev(EvQueue.time + t, self.ankunft, prio=2)
+        station = self.ekList[self.anzahlEk][1]
+        ev = Ev(EvQueue.time + t, self.ankunft, prio=2, args=(str(station), self.name))
         return ev
 
     def ankunft(self):
         t = self.ekList[self.anzahlEk][2] * self.ekList[self.anzahlEk][3]
-        ev = Ev(EvQueue.time + t, self.verlassen, prio=1)
-        return ev
+        station = self.ekList[self.anzahlEk][1]
+        if station.isBusy() is False and station.kundeWartet() is False:
+            station.queue(self)
+            ev = Ev(EvQueue.time + t, self.verlassen, prio=1, args=(str(station), self.name))
+            return ev
+        else:
+            station.queue(self)
+            ev = None
+            return ev
 
 
     def verlassen(self):
+        station = self.ekList[self.anzahlEk][1]
         if self.anzahlEk < len(self.ekList) - 1:
             self.anzahlEk += 1
-        ev = Ev(EvQueue.time, self.run, prio=2)
+            ev = [Ev(EvQueue.time, self.run, prio=2, args=(str(station), self.name))]
+            Customer.served[station] = 1
+        else:
+            ev = None
+        if station.kundeWartet() == True:
+            kunde = station.buffer.pop()
+            t = kunde.ekList[kunde.anzahlEk][2] * kunde.ekList[kunde.anzahlEk][3]
+            ev.append(Ev(EvQueue.time + t, kunde.verlassen, prio=2, args=(str(station), kunde.name)))
         return ev
 
 def startCustomers(einkaufsliste, name, sT, dT, mT):
