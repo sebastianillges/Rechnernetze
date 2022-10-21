@@ -109,11 +109,17 @@ class Station():
         self.CustomerWaiting = True
 
     def abarbeiten(self):
-        kunde = self.buffer.pop()
+        kunde = self.buffer.pop(0)
         self.busy = True
-        if self.buffer.__len__() is 0:
+        if self.buffer.__len__() == 0:
             self.CustomerWaiting = False
         kunde.served[self.name] = 1
+
+    def isBusy(self):
+        return self.busy
+
+    def kundeWartet(self):
+        return self.CustomerWaiting
 
 # class consists of
 # statistics variables
@@ -160,7 +166,6 @@ def startCustomers(einkaufsliste, name, sT, dT, mT):
         evQ.push(ev)
         i += 1
         t += dT
-
 
 evQ = EvQueue()
 baecker = Station(10, 'Bäcker')
