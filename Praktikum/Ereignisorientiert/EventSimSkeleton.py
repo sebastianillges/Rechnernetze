@@ -109,7 +109,7 @@ class Station():
         self.buffer.append(kunde)
         self.CustomerWaiting = True
 
-    def abarbeiten(self):
+    def bedienen(self):
         kunde = self.buffer.pop(0)
         self.busy = True
         if self.buffer.__len__() == 0:
@@ -152,6 +152,7 @@ class Customer():
         station = self.ekList[self.anzahlEk][1]
         if station.isBusy() is False and station.kundeWartet() is False:
             station.queue(self)
+            station.bedienen()
             ev = Ev(EvQueue.time + t, self.verlassen, prio=1, args=(str(station), self.name))
             return ev
         else:
