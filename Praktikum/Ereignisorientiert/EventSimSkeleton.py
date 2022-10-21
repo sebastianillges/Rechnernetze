@@ -84,8 +84,14 @@ class EvQueue:
             EvQueue.time = ev.t
 
             evN = ev.work()
-            while(evN is not None):
-                self.push(evN.pop(0))
+            if type(evN) is list:
+                if evN.__len__() == 1:
+                    self.push(evN.pop(0))
+                else:
+                    self.push(evN.pop(0))
+                    self.push(evN.pop(0))
+            elif evN is not None:
+                self.push(evN)
             
 
 
@@ -108,6 +114,7 @@ class Station():
     def queue(self, kunde):
         self.buffer.append(kunde)
         self.CustomerWaiting = True
+        print(str(EvQueue.time) + ":" + str(kunde.name) + "Queueing at " + str(self.name))
 
     def bedienen(self):
         kunde = self.buffer.pop(0)
@@ -163,10 +170,11 @@ class Customer():
 
     def verlassen(self):
         station = self.ekList[self.anzahlEk][1]
+        station.busy = False
+        print(str(EvQueue.time) + ":" + str(self.name) + "Queueing at " + str(station.name))
         if self.anzahlEk < len(self.ekList) - 1:
             self.anzahlEk += 1
             ev = [Ev(EvQueue.time, self.run, prio=2, args=(str(station), self.name))]
-            Customer.served[station] = 1
         else:
             ev = None
         if station.kundeWartet() == True:
