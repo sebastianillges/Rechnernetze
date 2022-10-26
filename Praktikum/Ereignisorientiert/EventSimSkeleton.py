@@ -121,7 +121,8 @@ class Station():
         self.busy = True
         if self.buffer.__len__() == 0:
             self.CustomerWaiting = False
-        kunde.served[self.name] = 1
+        Customer.served[self.name] += 1
+        return kunde
 
     def isBusy(self):
         return self.busy
@@ -146,6 +147,7 @@ class Customer():
         self.name = name
         self.startTime = startTime
         Customer.count += 1
+        self.flag = 0
 
     def run(self):
         t = self.ekList[0][0]
@@ -154,34 +156,54 @@ class Customer():
         return ev
 
     def ankunft(self):
-        t = self.ekList[0][2] * self.ekList[0][3]
+        t = self.ekList[0][1].delay_per_item * self.ekList[0][2]
         station = self.ekList[0][1]
         if station.isBusy() is False and station.kundeWartet() is False:
             station.queue(self)
-            station.bedienen()
+            station.busy = True
             ev = Ev(EvQueue.time + t, self.verlassen, prio=1, args=(str(station), self.name))
+            return ev
+        elif self.ekList[0][3] <= len(station.buffer):
+            Customer.dropped[station.name] += 1
+            self.flag = 1
+            print(str(EvQueue.time) + ":" + str(self.name) + " dropped at " + str(station.name))
+            self.ekList.pop(0)
+            t = self.ekList[0][0]
+            ev = Ev(EvQueue.time + t, self.run, prio=1, args=(str(station), self.name))
             return ev
         else:
             station.queue(self)
             ev = None
             return ev
 
+
     def verlassen(self):
         station = self.ekList[0][1]
+        kundeAlt = station.bedienen()
         station.busy = False
-        print(str(EvQueue.time) + ":" + str(self.name) + " Queueing at " + str(station.name))
-
+        print(str(EvQueue.time) + ":" + str(self.name) + " Finished at " + str(station.name))
+        if kundeAlt.name != self.name or kundeAlt.startTime != self.startTime:
+            print("The wrong Costumer was served")
         self.ekList.pop(0)
         if self.ekList.__len__() > 0:
+            print(self.ekList.__len__())
+            t = self.ekList[0][0]
             ev = [Ev(EvQueue.time, self.run, prio=2, args=(str(station), self.name))]
         else:
-            ev = []
+            Customer.duration += EvQueue.time - self.startTime
+            if self.flag == 0:
+                    Customer.complete += 1
+                    Customer.duration_cond_complete += EvQueue.time - self.startTime
 
-        if station.CustomerWaiting == True:
+            ev = None
 
+        if station.CustomerWaiting:
             kunde = station.buffer[0]
             t = kunde.ekList[0][1].delay_per_item * kunde.ekList[0][2]
-            ev.append(Ev(EvQueue.time + t, kunde.verlassen, prio=2, args=(str(station), kunde.name)))
+            if ev == None:
+                ev = (Ev(EvQueue.time + t, kunde.verlassen, prio=2, args=(str(station), kunde.name)))
+            else:
+                ev.append(Ev(EvQueue.time + t, kunde.verlassen, prio=2, args=(str(station), kunde.name)))
         return ev
 
 def startCustomers(einkaufsliste, name, sT, dT, mT):
