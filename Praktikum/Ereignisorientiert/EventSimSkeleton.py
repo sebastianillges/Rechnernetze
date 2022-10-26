@@ -47,13 +47,20 @@ class Ev:
         Ev.counter += 1
 
     def __lt__(self, other):
-        return self.t < other.t
+        if self.t < other.t:
+            return True
+        elif self.t == other.t:
+            return self.prio < other.prio
+        else:
+            return False
+
     def __le__(self, other):
-        return self.t <= other.t
-    def __gt__(self, other):
-        return self.t > other.t
-    def __ge__(self, other):
-        return self.t >= other.t
+        if self.t < other.t:
+            return True
+        elif self.t == other.t:
+            return self.prio <= other.prio
+        else:
+            return False
 
 
 # class consists of
@@ -152,7 +159,7 @@ class Customer():
     def run(self):
         t = self.ekList[0][0]
         station = self.ekList[0][1]
-        ev = Ev(EvQueue.time + t, self.ankunft, prio=1, args=(str(station), self.name))
+        ev = Ev(EvQueue.time + t, self.ankunft, prio=3, args=(str(station), self.name))
         return ev
 
     def ankunft(self):
@@ -169,7 +176,7 @@ class Customer():
             print(str(EvQueue.time) + ":" + str(self.name) + " dropped at " + str(station.name))
             self.ekList.pop(0)
             t = self.ekList[0][0]
-            ev = Ev(EvQueue.time + t, self.run, prio=1, args=(str(station), self.name))
+            ev = Ev(EvQueue.time + t, self.ankunft, prio=3, args=(str(station), self.name))
             return ev
         else:
             station.queue(self)
@@ -186,7 +193,6 @@ class Customer():
             print("The wrong Costumer was served")
         self.ekList.pop(0)
         if self.ekList.__len__() > 0:
-            print(self.ekList.__len__())
             t = self.ekList[0][0]
             ev = [Ev(EvQueue.time, self.run, prio=2, args=(str(station), self.name))]
         else:
@@ -201,9 +207,9 @@ class Customer():
             kunde = station.buffer[0]
             t = kunde.ekList[0][1].delay_per_item * kunde.ekList[0][2]
             if ev == None:
-                ev = (Ev(EvQueue.time + t, kunde.verlassen, prio=2, args=(str(station), kunde.name)))
+                ev = (Ev(EvQueue.time + t, kunde.verlassen, prio=1, args=(str(station), kunde.name)))
             else:
-                ev.append(Ev(EvQueue.time + t, kunde.verlassen, prio=2, args=(str(station), kunde.name)))
+                ev.append(Ev(EvQueue.time + t, kunde.verlassen, prio=1, args=(str(station), kunde.name)))
         return ev
 
 def startCustomers(einkaufsliste, name, sT, dT, mT):
@@ -211,7 +217,7 @@ def startCustomers(einkaufsliste, name, sT, dT, mT):
     t = sT
     while t < mT:
         kunde = Customer(list(einkaufsliste), name + str(i), t)
-        ev = Ev(t, kunde.run, prio=1)
+        ev = Ev(t, kunde.run, prio=2)
         evQ.push(ev)
         i += 1
         t += dT
