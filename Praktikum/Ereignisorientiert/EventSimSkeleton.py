@@ -145,7 +145,6 @@ class Customer():
         self.ekList = ekList
         self.name = name
         self.startTime = startTime
-        self.anzahlEk = 0
         Customer.count += 1
 
     def run(self):
