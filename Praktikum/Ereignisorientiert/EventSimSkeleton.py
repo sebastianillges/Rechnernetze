@@ -170,7 +170,7 @@ class Customer():
             station.busy = True
             ev = Ev(EvQueue.time + t, self.verlassen, prio=1, args=(str(station), self.name))
             return ev
-        elif self.ekList[0][3] <= len(station.buffer):
+        elif self.ekList[0][3] < len(station.buffer):
             Customer.dropped[station.name] += 1
             self.flag = 1
             print(str(EvQueue.time) + ":" + str(self.name) + " dropped at " + str(station.name))
@@ -194,7 +194,7 @@ class Customer():
         self.ekList.pop(0)
         if self.ekList.__len__() > 0:
             t = self.ekList[0][0]
-            ev = [Ev(EvQueue.time, self.run, prio=2, args=(str(station), self.name))]
+            ev = [Ev(EvQueue.time+t, self.ankunft, prio=3, args=(str(station), self.name))]
         else:
             Customer.duration += EvQueue.time - self.startTime
             if self.flag == 0:
