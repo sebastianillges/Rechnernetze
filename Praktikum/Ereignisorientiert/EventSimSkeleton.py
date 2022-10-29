@@ -121,10 +121,14 @@ class Station():
     def queue(self, kunde):
         self.buffer.append(kunde)
         self.CustomerWaiting = True
-        print(str(EvQueue.time) + ":" + str(kunde.name) + " Queueing at " + str(self.name))
+        my_print1(kunde.name, self.name, " Queueing at ")
+        my_print2(self.name, "Adding Customer", kunde.name)
+        ##print(str(EvQueue.time) + ":" + str(kunde.name) + " Queueing at " + str(self.name))
 
     def bedienen(self):
+
         kunde = self.buffer.pop(0)
+        my_print2(self.name, " Finished Customer", kunde.name)
         self.busy = True
         if self.buffer.__len__() == 0:
             self.CustomerWaiting = False
@@ -167,13 +171,15 @@ class Customer():
         station = self.ekList[0][1]
         if station.isBusy() is False and station.kundeWartet() is False:
             station.queue(self)
+            my_print2(station.name, " Serving customer ", self.name)
             station.busy = True
             ev = Ev(EvQueue.time + t, self.verlassen, prio=1, args=(str(station), self.name))
             return ev
         elif self.ekList[0][3] < len(station.buffer):
             Customer.dropped[station.name] += 1
             self.flag = 1
-            print(str(EvQueue.time) + ":" + str(self.name) + " dropped at " + str(station.name))
+            my_print1(self.name, station.name, " Queueing at ")
+           # print(str(EvQueue.time) + ":" + str(self.name) + " dropped at " + str(station.name))
             self.ekList.pop(0)
             t = self.ekList[0][0]
             ev = Ev(EvQueue.time + t, self.ankunft, prio=3, args=(str(station), self.name))
