@@ -55,7 +55,8 @@ class Station(Thread):
             self.buffer.pop(0)
 
             if simulation.numCompleted == Customer.count:
-                return # all Customers finished
+                print("thread " + self.name + " terminated " + str(simulation.numCompleted))
+                sys.exit() # all Customers finished
 
     def queue(self, customer):
         self.bufferLock.acquire()
@@ -93,15 +94,12 @@ class Customer(Thread):
             # walking to station
             time.sleep(self.getWegzeit() / simulation.DEBUG)
             # customer arrived
-            while len(self.ekList) > 0:
-                station = self.getStation()
-                if len(station.buffer) < self.getMaxQueueLen():
-                    station.queue(self)
-                    my_print1(self.name, "Queueing", station.name)
-                    break
-                else:
-                    my_print1(self.name, "Dropped", station.name)
-                    self.ekList.pop(0)
+            station = self.getStation()
+            if len(station.buffer) < self.getMaxQueueLen():
+                station.queue(self)
+                my_print1(self.name, "Queueing", station.name)
+            else:
+                my_print1(self.name, "Dropped", station.name)
 
             station = self.getStation()
             station.CustomerWaitingEv.set()
@@ -116,7 +114,8 @@ class Customer(Thread):
         # kunde DONE
         #my_print1(self.name, "", " DONE")
         simulation.numCompleted += 1
-        return
+        print("thread " + self.name + " terminated " + str(simulation.numCompleted))
+        sys.exit()
 
     def getWegzeit(self):
         return self.ekList[0][0]
@@ -194,6 +193,10 @@ if __name__ == "__main__":
     kundeA2 = Customer(list(ekListTest), "A2", 5)
     # kundeA2.start()
 
+for t in allCustomers:
+        t.join()
+
+print("dreck")
 
 f.close()
 fc.close()
