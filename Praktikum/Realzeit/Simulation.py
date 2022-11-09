@@ -89,8 +89,7 @@ class Station(Thread):
         return self.delay_per_item
 
     def printStatus(self, station, status, kunde):
-        #print(str(round(simulation.getCurrentTime())) + ":" + station + " " + status + " customer " + kunde)
-        print("%s: %s %s %s" % (str(round(simulation.getCurrentTime())), station, status, kunde))
+        print("%s: %s %s %s" % (str(simulation.getCurrentTime()), station, status, kunde))
 
 
 class Customer(Thread):
@@ -120,7 +119,7 @@ class Customer(Thread):
             # customer arrived
             station = self.getStation()
             station.CustomerWaitingEv.set()
-            if len(station.buffer) < self.getMaxQueueLen():
+            if len(station.buffer) <= self.getMaxQueueLen():
                 station.queue(self)
                 my_print_k(self.name, station.name, "Queueing")
 
@@ -142,6 +141,7 @@ class Customer(Thread):
         #my_print_k(self.name, "", " DONE")
         print("thread " + self.name + " terminated")
         if len(allCustomers) == 1:
+            simulation.endTime = simulation.getCurrentTime()
             for s in allStations:
                 s.CustomerWaitingEv.set()
         allCustomers.remove(self)
@@ -164,13 +164,14 @@ class Customer(Thread):
         return self.ekList[0][3]
 
     def printStatus(self, kunde, status, station):
-        print(str(round(simulation.getCurrentTime())) + ":" + kunde + " " + status + " at " + station)
+        print(str(simulation.getCurrentTime()) + ":" + kunde + " " + status + " at " + station)
 class Sim:
 
     startTime = time.time()
     simDone = False
-    DEBUG = 1000
+    DEBUG = 3000
     maxTime = 3000
+    endTime = 0
 
     def getCurrentTime(self):
         return (time.time() * simulation.DEBUG) - (self.startTime * simulation.DEBUG)
@@ -229,7 +230,7 @@ for c in allCustomers:
 for s in allStations:
     s.join()
 
-my_print('Simulationsende: %is' % simulation.getCurrentTime())
+my_print('Simulationsende: %is' % simulation.endTime)
 my_print('Anzahl Kunden: %i' % (Customer.count))
 my_print('Anzahl vollständige Einkäufe %i' % Customer.complete)
 x = Customer.duration / Customer.count

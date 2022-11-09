@@ -1,9 +1,11 @@
+import os
+import sys
 from collections import deque
 import heapq
 
-f = open("../../supermarkt.txt", "w")
-fc = open("../../supermarkt_customer.txt", "w")
-fs = open("../../supermarkt_station.txt", "w")
+f = open(os.path.join(sys.path[0], "supermarkt.txt"), "w")
+fc = open(os.path.join(sys.path[0], "supermarkt_customer.txt"), "w")
+fs = open(os.path.join(sys.path[0], "supermarkt_station.txt"), "w")
 
 
 # print on console and into supermarket log
