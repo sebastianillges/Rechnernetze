@@ -21,8 +21,8 @@ def my_print(msg):
 # s: station name
 def my_print_k(k, s, msg):
     t = simulation.getCurrentTime()
-    print(str(round(t)) + ':' + k + ' ' + msg + ' at ' + s)
-    fc.write(str(round(t)) + ':' + k + ' ' + msg + ' at ' + s + '\n')
+    print(str(round(t / 1000000000)) + ':' + k + ' ' + msg + ' at ' + s)
+    fc.write(str(round(t / 1000000000)) + ':' + k + ' ' + msg + ' at ' + s + '\n')
 
 
 # print on console and into station log
@@ -30,8 +30,8 @@ def my_print_k(k, s, msg):
 # name: customer name
 def my_print_s(s, msg, name):
     t = simulation.getCurrentTime()
-    print(str(round(t))+':'+s+' '+msg)
-    fs.write(str(round(t)) + ':' + s + ' ' + msg + ' ' + name + '\n')
+    print(str(round(t / 1000000000))+':'+s+' '+msg)
+    fs.write(str(round(t / 1000000000)) + ':' + s + ' ' + msg + ' ' + name + '\n')
 
 class Station(Thread):
     def __init__(self, d, n):
@@ -107,6 +107,7 @@ class Customer(Thread):
         self.startTime = startTime
         self.CustomerServingEv = Event()
         self.droppedFlag = False
+        self.endTime = 0
     def run(self):
         allCustomers.append(self)
 
@@ -136,19 +137,19 @@ class Customer(Thread):
                 self.droppedFlag = True
 
             self.ekList.pop(0)
-
+        self.endTime = simulation.getCurrentTime() / 1000000000
         # kunde DONE
         #my_print_k(self.name, "", " DONE")
-        print("thread " + self.name + " terminated")
         if len(allCustomers) == 1:
             simulation.endTime = simulation.getCurrentTime()
             for s in allStations:
                 s.CustomerWaitingEv.set()
         allCustomers.remove(self)
-        Customer.duration += (simulation.getCurrentTime() - self.startTime)
+        Customer.duration += (self.endTime - self.startTime)
         if self.droppedFlag is False:
             Customer.complete += 1
-            Customer.duration_cond_complete += (simulation.getCurrentTime() - self.startTime)
+            Customer.duration_cond_complete += (self.endTime - self.startTime)
+        print("thread " + self.name + " terminated")
         sys.exit()
 
     def getWegzeit(self):
@@ -167,15 +168,17 @@ class Customer(Thread):
         print(str(simulation.getCurrentTime()) + ":" + kunde + " " + status + " at " + station)
 class Sim:
 
-    startTime = time.time()
+    startTime = time.time_ns()
     simDone = False
-    DEBUG = 3000
+    DEBUG = 1
     maxTime = 3000
     endTime = 0
 
     def getCurrentTime(self):
-        return (time.time() * simulation.DEBUG) - (self.startTime * simulation.DEBUG)
+        return time.time_ns() - self.startTime
 
+    def setEndTime(self):
+        self.endTime = self.getCurrentTime()
 
 def startCustomers(einkaufsliste, name, sT, dT, mT):
     i = 1
