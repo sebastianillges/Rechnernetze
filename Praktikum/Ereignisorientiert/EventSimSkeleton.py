@@ -1,9 +1,11 @@
+import os
+import sys
 from collections import deque
 import heapq
 
-f = open("../../supermarkt.txt", "w")
-fc = open("../../supermarkt_customer.txt", "w")
-fs = open("../../supermarkt_station.txt", "w")
+f = open(os.path.join(sys.path[0], "supermarkt.txt"), "w")
+fc = open(os.path.join(sys.path[0], "supermarkt_customer.txt"), "w")
+fs = open(os.path.join(sys.path[0], "supermarkt_station.txt"), "w")
 
 
 # print on console and into supermarket log
@@ -26,7 +28,7 @@ def my_print1(k, s, msg):
 # name: customer name
 def my_print2(s, msg, name):
     t = EvQueue.time
-    # print(str(round(t,4))+':'+s+' '+msg)
+    print(str(round(t,4))+':'+s+' '+msg)
     fs.write(str(round(t, 4)) + ':' + s + ' ' + msg + ' ' + name + '\n')
 
 
@@ -123,10 +125,8 @@ class Station():
         self.CustomerWaiting = True
         my_print1(kunde.name, self.name, " Queueing at ")
         my_print2(self.name, "Adding Customer", kunde.name)
-        ##print(str(EvQueue.time) + ":" + str(kunde.name) + " Queueing at " + str(self.name))
 
     def bedienen(self):
-
         kunde = self.buffer.pop(0)
         my_print2(self.name, " Finished Customer", kunde.name)
         self.busy = True
@@ -176,10 +176,10 @@ class Customer():
             ev = Ev(EvQueue.time + t, self.verlassen, prio=1, args=(str(station), self.name))
             return ev
         elif self.ekList[0][3] < len(station.buffer):
+            my_print1(self.name, station.name, " Dropped at ")
             Customer.dropped[station.name] += 1
             self.flag = 1
             my_print1(self.name, station.name, " Queueing at ")
-           # print(str(EvQueue.time) + ":" + str(self.name) + " dropped at " + str(station.name))
             self.ekList.pop(0)
             t = self.ekList[0][0]
             ev = Ev(EvQueue.time + t, self.ankunft, prio=3, args=(str(station), self.name))
@@ -194,7 +194,7 @@ class Customer():
         station = self.ekList[0][1]
         kundeAlt = station.bedienen()
         station.busy = False
-        print(str(EvQueue.time) + ":" + str(self.name) + " Finished at " + str(station.name))
+        my_print1(self.name, station.name , " Finished at ")
         if kundeAlt.name != self.name or kundeAlt.startTime != self.startTime:
             print("The wrong Costumer was served")
         self.ekList.pop(0)

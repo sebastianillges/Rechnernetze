@@ -1,0 +1,31 @@
+Wireshark
+
+Aufgabe 3
+1.
+- ARP
+- MDNS
+- UDP
+- DHCP
+- NBNS
+2. [Time since request: 0.116914000 seconds]
+3. IP: 172.20.148.115
+MAC: a4:83:e7:6b:65:23
+Destination MAC: 00:a6:ca:f4:9b:4d
+Netzwerkknoten: Destination: Cisco_f4:9b:4d (00:a6:ca:f4:9b:4d)
+4. TCP
+Aufgabe 4
+1.
+MAC:
+src: 00 21 cc 63 82 2c
+dest: 38 22 d6 67 19 00
+IP:
+src: 8d 25 1d 5d => 141.37.29.93
+dest: 5b c6 ae c0 => 91.198.174.192
+TCP Ports:
+src: e2 26 (?)
+dest: 00 50 (80)
+Aufgabe 5
+1. tcp.port == 80 && http
+2. Ja, weil bisher alle HTTP Anfragen diesen TCP Port verwendet haben.
+3. Es werden alle http anfragen angezeigt, die nicht über den UDP Port 1900 laufen.
+4. http && (ip.src == ip.dst)
