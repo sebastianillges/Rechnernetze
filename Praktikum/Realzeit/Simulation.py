@@ -53,7 +53,7 @@ class Station(Thread):
 
             self.CustomerWaitingEv.wait()
             if len(allCustomers) == 0:
-                print("thread " + self.name + " terminated")
+                #print("thread " + self.name + " terminated")
                 sys.exit()  # all Customers finished
             # kunde angekommen
             self.clearCustomerWaitingEv()
@@ -149,7 +149,7 @@ class Customer(Thread):
         if self.droppedFlag is False:
             Customer.complete += 1
             Customer.duration_cond_complete += (self.endTime - self.startTime)
-        print("thread " + self.name + " terminated")
+        #print("thread " + self.name + " terminated")
         sys.exit()
 
     def getWegzeit(self):
@@ -244,8 +244,6 @@ S = ('Bäcker', 'Metzger', 'Käse', 'Kasse')
 for s in S:
     x = Customer.dropped[s] / (Customer.served[s] + Customer.dropped[s]) * 100
     my_print('Drop percentage at %s: %.2f' % (s, x))
-
-print("holymoly")
 
 f.close()
 fc.close()
