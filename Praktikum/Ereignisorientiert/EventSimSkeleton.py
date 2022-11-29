@@ -1,6 +1,5 @@
 import os
 import sys
-from collections import deque
 import heapq
 
 f = open(os.path.join(sys.path[0], "supermarkt.txt"), "w")
@@ -17,19 +16,19 @@ def my_print(msg):
 # print on console and into customer log
 # k: customer name
 # s: station name
-def my_print1(k, s, msg):
+def my_print1(k, stat, msg):
     t = EvQueue.time
-    print(str(round(t, 4)) + ':' + k + ' ' + msg + ' at ' + s)
-    fc.write(str(round(t, 4)) + ':' + k + ' ' + msg + ' at ' + s + '\n')
+    print(str(round(t, 4)) + ':' + k + ' ' + msg + ' at ' + stat)
+    fc.write(str(round(t, 4)) + ':' + k + ' ' + msg + ' at ' + stat + '\n')
 
 
 # print on console and into station log
 # s: station name
 # name: customer name
-def my_print2(s, msg, name):
+def my_print2(stat, msg, name):
     t = EvQueue.time
-    print(str(round(t,4))+':'+s+' '+msg)
-    fs.write(str(round(t, 4)) + ':' + s + ' ' + msg + ' ' + name + '\n')
+    print(str(round(t, 4)) + ':' + stat + ' ' + msg)
+    fs.write(str(round(t, 4)) + ':' + stat + ' ' + msg + ' ' + name + '\n')
 
 
 # class consists of instance variables:
@@ -72,7 +71,7 @@ class Ev:
 # methods push, pop, and start as described in the problem description
 
 class EvQueue:
-# please implement here
+    # please implement here
     q = []
 
     time = 0
@@ -101,9 +100,6 @@ class EvQueue:
                     self.push(evN.pop(0))
             elif evN is not None:
                 self.push(evN)
-            
-
-
 
 
 # class consists of
@@ -111,8 +107,8 @@ class EvQueue:
 # buffer: customer queue
 # delay_per_item: service time
 # CustomerWaiting, busy: possible states of this station
-class Station():
-# please implement here
+class Station:
+    # please implement here
     def __init__(self, d, n):
         self.delay_per_item = d
         self.name = n
@@ -141,17 +137,19 @@ class Station():
     def kundeWartet(self):
         return self.CustomerWaiting
 
+
 # class consists of
 # statistics variables
 # and methods as described in the problem description
-class Customer():
+class Customer:
     served = dict()
     dropped = dict()
     complete = 0
     duration = 0
     duration_cond_complete = 0
     count = 0
-# please implement here
+
+    # please implement here
 
     def __init__(self, ekList, name, startTime):
         self.ekList = ekList
@@ -189,34 +187,34 @@ class Customer():
             ev = None
             return ev
 
-
     def verlassen(self):
         station = self.ekList[0][1]
         kundeAlt = station.bedienen()
         station.busy = False
-        my_print1(self.name, station.name , " Finished at ")
+        my_print1(self.name, station.name, " Finished at ")
         if kundeAlt.name != self.name or kundeAlt.startTime != self.startTime:
             print("The wrong Costumer was served")
         self.ekList.pop(0)
         if self.ekList.__len__() > 0:
             t = self.ekList[0][0]
-            ev = [Ev(EvQueue.time+t, self.ankunft, prio=3, args=(str(station), self.name))]
+            ev = [Ev(EvQueue.time + t, self.ankunft, prio=3, args=(str(station), self.name))]
         else:
             Customer.duration += EvQueue.time - self.startTime
             if self.flag == 0:
-                    Customer.complete += 1
-                    Customer.duration_cond_complete += EvQueue.time - self.startTime
+                Customer.complete += 1
+                Customer.duration_cond_complete += EvQueue.time - self.startTime
 
             ev = None
 
         if station.CustomerWaiting:
             kunde = station.buffer[0]
             t = kunde.ekList[0][1].delay_per_item * kunde.ekList[0][2]
-            if ev == None:
+            if ev is None:
                 ev = (Ev(EvQueue.time + t, kunde.verlassen, prio=1, args=(str(station), kunde.name)))
             else:
                 ev.append(Ev(EvQueue.time + t, kunde.verlassen, prio=1, args=(str(station), kunde.name)))
         return ev
+
 
 def startCustomers(einkaufsliste, name, sT, dT, mT):
     i = 1
@@ -227,6 +225,7 @@ def startCustomers(einkaufsliste, name, sT, dT, mT):
         evQ.push(ev)
         i += 1
         t += dT
+
 
 evQ = EvQueue()
 baecker = Station(10, 'Bäcker')
@@ -247,7 +246,7 @@ startCustomers(einkaufsliste1, 'A', 0, 200, 30 * 60 + 1)
 startCustomers(einkaufsliste2, 'B', 1, 60, 30 * 60 + 1)
 evQ.start()
 my_print('Simulationsende: %is' % EvQueue.time)
-my_print('Anzahl Kunden: %i' % (Customer.count))
+my_print('Anzahl Kunden: %i' % Customer.count)
 my_print('Anzahl vollständige Einkäufe %i' % Customer.complete)
 x = Customer.duration / Customer.count
 my_print(str('Mittlere Einkaufsdauer %.2fs' % x))

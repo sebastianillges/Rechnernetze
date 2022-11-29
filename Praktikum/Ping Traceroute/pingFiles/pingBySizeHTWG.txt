@@ -1,0 +1,168 @@
+
+Ping wird ausgefhrt fr cms.htwg-konstanz.de [2001:7c0:5f0:f020::20:17] mit 1 Bytes Daten:
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=25ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=20ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=22ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=22ms 
+
+Ping-Statistik fr 2001:7c0:5f0:f020::20:17:
+    Pakete: Gesendet = 4, Empfangen = 4, Verloren = 0
+    (0% Verlust),
+Ca. Zeitangaben in Millisek.:
+    Minimum = 20ms, Maximum = 25ms, Mittelwert = 22ms
+
+Ping wird ausgefhrt fr cms.htwg-konstanz.de [2001:7c0:5f0:f020::20:17] mit 2 Bytes Daten:
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=22ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=21ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=31ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=21ms 
+
+Ping-Statistik fr 2001:7c0:5f0:f020::20:17:
+    Pakete: Gesendet = 4, Empfangen = 4, Verloren = 0
+    (0% Verlust),
+Ca. Zeitangaben in Millisek.:
+    Minimum = 21ms, Maximum = 31ms, Mittelwert = 23ms
+
+Ping wird ausgefhrt fr cms.htwg-konstanz.de [2001:7c0:5f0:f020::20:17] mit 4 Bytes Daten:
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=21ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=20ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=26ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=21ms 
+
+Ping-Statistik fr 2001:7c0:5f0:f020::20:17:
+    Pakete: Gesendet = 4, Empfangen = 4, Verloren = 0
+    (0% Verlust),
+Ca. Zeitangaben in Millisek.:
+    Minimum = 20ms, Maximum = 26ms, Mittelwert = 22ms
+
+Ping wird ausgefhrt fr cms.htwg-konstanz.de [2001:7c0:5f0:f020::20:17] mit 8 Bytes Daten:
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=22ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=20ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=22ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=21ms 
+
+Ping-Statistik fr 2001:7c0:5f0:f020::20:17:
+    Pakete: Gesendet = 4, Empfangen = 4, Verloren = 0
+    (0% Verlust),
+Ca. Zeitangaben in Millisek.:
+    Minimum = 20ms, Maximum = 22ms, Mittelwert = 21ms
+
+Ping wird ausgefhrt fr cms.htwg-konstanz.de [2001:7c0:5f0:f020::20:17] mit 16 Bytes Daten:
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=20ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=22ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=20ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=20ms 
+
+Ping-Statistik fr 2001:7c0:5f0:f020::20:17:
+    Pakete: Gesendet = 4, Empfangen = 4, Verloren = 0
+    (0% Verlust),
+Ca. Zeitangaben in Millisek.:
+    Minimum = 20ms, Maximum = 22ms, Mittelwert = 20ms
+
+Ping wird ausgefhrt fr cms.htwg-konstanz.de [2001:7c0:5f0:f020::20:17] mit 32 Bytes Daten:
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=20ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=22ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=21ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=20ms 
+
+Ping-Statistik fr 2001:7c0:5f0:f020::20:17:
+    Pakete: Gesendet = 4, Empfangen = 4, Verloren = 0
+    (0% Verlust),
+Ca. Zeitangaben in Millisek.:
+    Minimum = 20ms, Maximum = 22ms, Mittelwert = 20ms
+
+Ping wird ausgefhrt fr cms.htwg-konstanz.de [2001:7c0:5f0:f020::20:17] mit 64 Bytes Daten:
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=21ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=20ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=23ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=31ms 
+
+Ping-Statistik fr 2001:7c0:5f0:f020::20:17:
+    Pakete: Gesendet = 4, Empfangen = 4, Verloren = 0
+    (0% Verlust),
+Ca. Zeitangaben in Millisek.:
+    Minimum = 20ms, Maximum = 31ms, Mittelwert = 23ms
+
+Ping wird ausgefhrt fr cms.htwg-konstanz.de [2001:7c0:5f0:f020::20:17] mit 128 Bytes Daten:
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=21ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=20ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=21ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=22ms 
+
+Ping-Statistik fr 2001:7c0:5f0:f020::20:17:
+    Pakete: Gesendet = 4, Empfangen = 4, Verloren = 0
+    (0% Verlust),
+Ca. Zeitangaben in Millisek.:
+    Minimum = 20ms, Maximum = 22ms, Mittelwert = 21ms
+
+Ping wird ausgefhrt fr cms.htwg-konstanz.de [2001:7c0:5f0:f020::20:17] mit 256 Bytes Daten:
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=27ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=20ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=21ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=22ms 
+
+Ping-Statistik fr 2001:7c0:5f0:f020::20:17:
+    Pakete: Gesendet = 4, Empfangen = 4, Verloren = 0
+    (0% Verlust),
+Ca. Zeitangaben in Millisek.:
+    Minimum = 20ms, Maximum = 27ms, Mittelwert = 22ms
+
+Ping wird ausgefhrt fr cms.htwg-konstanz.de [2001:7c0:5f0:f020::20:17] mit 512 Bytes Daten:
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=22ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=21ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=22ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=20ms 
+
+Ping-Statistik fr 2001:7c0:5f0:f020::20:17:
+    Pakete: Gesendet = 4, Empfangen = 4, Verloren = 0
+    (0% Verlust),
+Ca. Zeitangaben in Millisek.:
+    Minimum = 20ms, Maximum = 22ms, Mittelwert = 21ms
+
+Ping wird ausgefhrt fr cms.htwg-konstanz.de [2001:7c0:5f0:f020::20:17] mit 1024 Bytes Daten:
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=21ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=21ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=23ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=25ms 
+
+Ping-Statistik fr 2001:7c0:5f0:f020::20:17:
+    Pakete: Gesendet = 4, Empfangen = 4, Verloren = 0
+    (0% Verlust),
+Ca. Zeitangaben in Millisek.:
+    Minimum = 21ms, Maximum = 25ms, Mittelwert = 22ms
+
+Ping wird ausgefhrt fr cms.htwg-konstanz.de [2001:7c0:5f0:f020::20:17] mit 2048 Bytes Daten:
+Zeitberschreitung der Anforderung.
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=34ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=31ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=30ms 
+
+Ping-Statistik fr 2001:7c0:5f0:f020::20:17:
+    Pakete: Gesendet = 4, Empfangen = 3, Verloren = 1
+    (25% Verlust),
+Ca. Zeitangaben in Millisek.:
+    Minimum = 30ms, Maximum = 34ms, Mittelwert = 31ms
+
+Ping wird ausgefhrt fr cms.htwg-konstanz.de [2001:7c0:5f0:f020::20:17] mit 4096 Bytes Daten:
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=36ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=30ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=31ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=34ms 
+
+Ping-Statistik fr 2001:7c0:5f0:f020::20:17:
+    Pakete: Gesendet = 4, Empfangen = 4, Verloren = 0
+    (0% Verlust),
+Ca. Zeitangaben in Millisek.:
+    Minimum = 30ms, Maximum = 36ms, Mittelwert = 32ms
+
+Ping wird ausgefhrt fr cms.htwg-konstanz.de [2001:7c0:5f0:f020::20:17] mit 8192 Bytes Daten:
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=37ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=40ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=39ms 
+Antwort von 2001:7c0:5f0:f020::20:17: Zeit=41ms 
+
+Ping-Statistik fr 2001:7c0:5f0:f020::20:17:
+    Pakete: Gesendet = 4, Empfangen = 4, Verloren = 0
+    (0% Verlust),
+Ca. Zeitangaben in Millisek.:
+    Minimum = 37ms, Maximum = 41ms, Mittelwert = 39ms
