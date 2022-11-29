@@ -222,10 +222,10 @@ if __name__ == "__main__":
     startCustomers(einkaufsliste1, 'A', 0, 200, 30 * 60 + 1)
     startCustomers(einkaufsliste2, 'B', 1, 60, 30 * 60 + 1)
 
-    ekListTest = [(3, baeckerTest, 2, 10)]
-    kundeA1 = Customer(list(ekListTest), "A1", 1)
+    #ekListTest = [(3, baeckerTest, 2, 10)]
+    #kundeA1 = Customer(list(ekListTest), "A1", 1)
     #kundeA1.start()
-    kundeA2 = Customer(list(ekListTest), "A2", 5)
+    #kundeA2 = Customer(list(ekListTest), "A2", 5)
     #kundeA2.start()
 
 for c in allCustomers:
