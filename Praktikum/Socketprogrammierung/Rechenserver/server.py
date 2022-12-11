@@ -7,20 +7,25 @@ def eval(op, N, zArray):
     if N != len(zArray):
         print("Argument N != number of elements")
         return
-
-    if op == "Summe" or op == "+":
+    operator = ""
+    for c in op:
+        if c.decode("utf-8") != " ":
+            operator += c.decode("utf-8")
+    operator = str(operator)
+    print(operator)
+    if operator == "Summe" or operator == "+":
         for z in zArray:
             result += z
-    elif op == "Produkt" or op == "*":
+    elif operator == "Produkt" or operator == "*":
+        result = 1
         for z in zArray:
             result *= z
-    elif op == "Minimum" or op == "min":
+    elif operator == "Minimum" or operator == "min":
         result = min(zArray)
-    elif op == "Maximum" or op == "max":
+    elif operator == "Maximum" or operator == "max":
         result = max(zArray)
     else:
-        print("Invalid Operation")
-        result = None
+        print("Invalid Operation " + operator)
     return result
 
 My_IP = 'localhost'
@@ -37,14 +42,13 @@ sock.listen(1)
 print('Listening ...')
 
 while 1 and time.time() < t_end:
-    print("okö")
     while time.time() < t_end:
         try:
             conn, addr = sock.accept()
             print('Incoming connection accepted: ', addr)
             break
         except socket.timeout:
-            print('Socket timed out listening',time.asctime())
+            print('Socket timed out listening', time.asctime())
 
     while time.time() < t_end:
         try:
@@ -56,12 +60,15 @@ while 1 and time.time() < t_end:
                 print("Connection closed")
                 break
             dataSize = len(bytes(data))
-            datadecoded = struct.unpack("IsB" + "i" * int((dataSize - 8) / 4), data)
-            # Des nur dass die zahlen wieder ein array sind
-            zArray = datadecoded[3:]
-            datadecoded = (datadecoded[0], datadecoded[1], datadecoded[2], zArray)
-            print('received message: ', data, 'from ', addr, " decoded: ", datadecoded)
+            print(dataSize)
+            datadecoded = struct.unpack("I" + "s" * 7 + "B" + "i" * int((dataSize - 12) / 4), data)
+            datadecoded = (datadecoded[0], datadecoded[1:8], datadecoded[8], datadecoded[9:])
 
+            print('received message: ', data, 'from ', addr, " decoded: ", datadecoded)
+            result = eval(datadecoded[1], datadecoded[2], datadecoded[3])
+            print(result)
+            response = struct.pack("Ii", datadecoded[0], result)
+            conn.send(response)
 
         except socket.timeout:
             print('Socket timed out at', time.asctime())
@@ -69,4 +76,4 @@ while 1 and time.time() < t_end:
 sock.close()
 if conn:
     conn.close()
-    print("Connection closed")
+    print("Connection closed and timed out")
