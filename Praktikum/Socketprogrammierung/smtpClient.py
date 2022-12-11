@@ -2,8 +2,8 @@ import base64
 import socket
 
 server = ("asmtp.htwg-konstanz.de", 587)
-srcmail = "sebastian.illges@htwg-konstanz"
-dstmail = "sebastian.illges@htwg-konstanz"
+srcmail = "sebastian.illges@htwg-konstanz.de"
+dstmail = "sebastian.illges@htwg-konstanz.de"
 subject = "Test"
 msg = "Message"
 
@@ -29,11 +29,13 @@ recv = socket.recv(1024).decode()
 print("> " + recv)
 
 # HELO
+# versteh ich nicht
+'''
 socket.send("HELO hä\r\n".encode())
 print("< HELO hä")
 recvHelo = socket.recv(1024).decode()
 print("> " + recvHelo)
-
+'''
 # Login
 socket.send("AUTH LOGIN\r\n".encode())
 print("< AUTH LOGIN")
