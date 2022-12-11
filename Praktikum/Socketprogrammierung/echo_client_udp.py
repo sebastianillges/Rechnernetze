@@ -1,4 +1,5 @@
 import socket
+import time
 
 Server_IP = '127.0.0.1'
 Server_PORT = 50000
@@ -11,6 +12,6 @@ try:
     data, addr = sock.recvfrom(1024)
     print('received message: '+data.decode('utf-8')+' from ', addr)
 except socket.timeout:
-    print('Socket timed out at',time.asctime())
+    print('Socket timed out at', time.asctime())
 
 sock.close()
