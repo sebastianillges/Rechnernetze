@@ -2,7 +2,7 @@ import socket
 import time
 
 Server_IP = '127.0.0.1'
-Server_PORT = 50000
+Server_PORT = 20000
 MESSAGE = 'Hello, World!'
 print('Sending message', MESSAGE, 'to UDP server with IP ', Server_IP, ' on Port=', Server_PORT)
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 

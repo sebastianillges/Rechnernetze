@@ -83,4 +83,3 @@ socket.send("QUIT\r\n".encode())
 print("< QUIT")
 recvQuit = socket.recv(1024).decode()
 print("> " + recvQuit)
-

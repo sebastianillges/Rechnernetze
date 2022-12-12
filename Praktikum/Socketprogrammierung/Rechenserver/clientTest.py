@@ -5,7 +5,7 @@ import time
 Server_IP = 'localhost'
 Server_PORT = 50000
 id = 1
-operator = "Maximum"
+operator = "+"
 operator = '{message: <7}'.format(message=operator)
 print(operator)
 operatorBytes = []

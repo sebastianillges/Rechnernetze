@@ -11,8 +11,6 @@ def eval(op, N, zArray):
     for c in op:
         if c.decode("utf-8") != " ":
             operator += c.decode("utf-8")
-    operator = str(operator)
-    print(operator)
     if operator == "Summe" or operator == "+":
         for z in zArray:
             result += z
@@ -34,9 +32,9 @@ server_activity_period = 30
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.bind((My_IP, My_PORT))
-print('Listening on Port ',My_PORT, ' for incoming TCP connections')
+print('Listening on Port ', My_PORT, ' for incoming TCP connections')
 
-t_end=time.time()+server_activity_period # Ende der Aktivitätsperiode
+t_end = time.time()+server_activity_period # Ende der Aktivitätsperiode
 
 sock.listen(1)
 print('Listening ...')
@@ -60,13 +58,11 @@ while 1 and time.time() < t_end:
                 print("Connection closed")
                 break
             dataSize = len(bytes(data))
-            print(dataSize)
             datadecoded = struct.unpack("I" + "s" * 7 + "B" + "i" * int((dataSize - 12) / 4), data)
             datadecoded = (datadecoded[0], datadecoded[1:8], datadecoded[8], datadecoded[9:])
 
             print('received message: ', data, 'from ', addr, " decoded: ", datadecoded)
             result = eval(datadecoded[1], datadecoded[2], datadecoded[3])
-            print(result)
             response = struct.pack("Ii", datadecoded[0], result)
             conn.send(response)
 
