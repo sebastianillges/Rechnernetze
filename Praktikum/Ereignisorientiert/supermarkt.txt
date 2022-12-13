@@ -1,9 +1,9 @@
 Simulationsende: 3076s
 Anzahl Kunden: 40
-Anzahl vollst‰ndige Eink‰ufe 28
+Anzahl vollst√§ndige Eink√§ufe 28
 Mittlere Einkaufsdauer 616.90s
-Mittlere Einkaufsdauer (vollst‰ndig): 783.14s
-Drop percentage at B‰cker: 0.00
+Mittlere Einkaufsdauer (vollst√§ndig): 783.14s
+Drop percentage at B√§cker: 0.00
 Drop percentage at Metzger: 30.00
-Drop percentage at K‰se: 0.00
+Drop percentage at K√§se: 0.00
 Drop percentage at Kasse: 0.00

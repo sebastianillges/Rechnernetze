@@ -7,20 +7,27 @@ from time import sleep
 def test_port_number(host, port):
     # create a socket
     sock = socket(AF_INET, SOCK_STREAM)
-    sock.settimeout(2)
+    sock.setblocking(False)
+    sock.settimeout(10)
     # try to connect to the host
-    try:
-        print(sock.connect_ex((host, port)))
-        return True
-    except:
-        return False
+    result = sock.connect_ex((host, port))
+    sock.close()
+    return result
+
 
 
 # scan port numbers on a host
 def port_scan(host, port):
     # scan each port number
-    if test_port_number(host, port):
+    res = test_port_number(host, port)
+    if res == 0:
         print(f'> {host}:{port} open')
+    elif res == 61:
+        print(f'> {host}:{port} connecting restricted')
+    elif res == 60:
+        print(f'> {host}:{port} closed')
+    else:
+        print(f'> {host}:{port} %d' % res)
 
 
 print(f'Scanning 141.37.168.26...')
