@@ -2,7 +2,7 @@ from socket import SOCK_STREAM, AF_INET, socket
 from threading import Thread
 from time import sleep
 
-
+portList = []
 # returns True if a connection can be made, False otherwise
 def test_port_number(host, port):
     # create a socket
@@ -20,15 +20,20 @@ def test_port_number(host, port):
 def port_scan(host, port):
     # scan each port number
     res = test_port_number(host, port)
-    if res == 61 or res == 60:
+    if res == 0:
+        print(f'> {host}:{port} open')
+        list.append(portList, port)
+    elif res == 61 or res == 60:
         print(f'> {host}:{port} closed')
     else:
-        print(f'> {host}:{port} open')
+        print(f'> {host}:{port} %d' % res)
 
 
-print(f'Scanning 141.37.168.26...')
+print(f'Scanning TCP-Port 141.37.168.26...')
 for i in range(1, 51):
     # create a thread for each port number
     sleep(0.1)
     t = Thread(target=port_scan, args=('141.37.168.26', i))
     t.start()
+
+print('Offene Ports:', portList)
