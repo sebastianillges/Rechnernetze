@@ -20,14 +20,10 @@ def test_port_number(host, port):
 def port_scan(host, port):
     # scan each port number
     res = test_port_number(host, port)
-    if res == 0:
-        print(f'> {host}:{port} open')
-    elif res == 61:
-        print(f'> {host}:{port} connecting restricted')
-    elif res == 60:
+    if res == 61 or res == 60:
         print(f'> {host}:{port} closed')
     else:
-        print(f'> {host}:{port} %d' % res)
+        print(f'> {host}:{port} open')
 
 
 print(f'Scanning 141.37.168.26...')
