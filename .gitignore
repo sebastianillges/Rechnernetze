@@ -1,3 +1,5 @@
 # PyCharm
 venv/
 .idea/
+*.xml
+*.iml
