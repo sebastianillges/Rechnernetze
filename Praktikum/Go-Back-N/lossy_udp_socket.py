@@ -38,17 +38,15 @@ class lossy_udp_socket():
         while not self.STOP:
             try:
                 packet, addr = self.sock.recvfrom(self.nBytes)
-                #print("addr: " + str(addr))
-                #print("self.addr: " + str(self.addr))
                 if addr == self.addr:
                     if random.random() > self.PLR:
-                        #print('Received packet with length: ' + str(len(packet)))
                         self.conn.receive(packet)
                     else:
-                        id = packet.decode("utf-8")[:4]
-                        while id.startswith("0") and len(id) > 1: id = id[1:]
-                        print('Dropped packet ' + id)
-                        sleep(0.001)
+                        #id = packet.decode("utf-8")[:4]
+                        #while id.startswith("0") and len(id) > 1: id = id[1:]
+                        #print('Dropped packet ' + id)
+                        #sleep(0.001)
+                        pass
 
                 else:
                     print('Warning: received packet from remote address' + str(addr))
