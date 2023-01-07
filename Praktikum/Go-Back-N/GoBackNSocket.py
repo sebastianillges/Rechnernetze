@@ -12,9 +12,14 @@ def idToInt(id):
 
 
 class GoBackNSocket():
-    currentSeg = 0
+    currentPackage = 0
+    expectedPackage = 0
+    windowMax = 0
+    lastAck = 0
 
-    def __init__(self, localPort, remotePort, remoteAddress, PLR=0.1, segmentSize=1000, windowSize=10):
+    receivedMsg = ""
+
+    def __init__(self, localPort, remotePort, remoteAddress, PLR=0.1, segmentSize=1000, windowSize=1000, timeout=1, p=False):
         self.localPort = localPort
         self.remotePort = remotePort
         self.remoteAddress = remoteAddress
@@ -23,7 +28,11 @@ class GoBackNSocket():
         if self.segmentSize <= 4:
             self.segmentSize = 5
         self.windowSize = windowSize
-
+        self.timeout = timeout
+        GoBackNSocket.windowMax = self.windowSize - 1
+        self.t = time.time()
+        self.headerSize = 4
+        self.p = p
 
     def send(self, msg):
         length = len(msg)
@@ -76,7 +85,10 @@ if __name__ == '__main__':
     except:
         pass
 
-    windowSize = int(sys.argv[1])
+    if len(sys.argv) > 1:
+        windowSize = int(sys.argv[1])
+    else:
+        windowSize = 256
 
 
     serverPort = 12000
