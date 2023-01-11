@@ -65,7 +65,7 @@ class GoBackNSocket():
             GoBackNSocket.receivedMsg = GoBackNSocket.receivedMsg + msg[4:]
 
     def pprint(self, text):
-        string = text.ljust(150, ' ')
+        string = text.ljust(120, ' ')
         string = string + str(f"current = {GoBackNSocket.currentPackage}, "
                               f"expected = {GoBackNSocket.expectedPackage}, "
                               f"windowMax = {self.windowMax}")
@@ -81,7 +81,7 @@ class package():
 
 if __name__ == '__main__':
     try:
-        os.remove("received.txt")
+        os.remove("receivedLotr.txt")
     except:
         pass
 
@@ -96,8 +96,8 @@ if __name__ == '__main__':
     serverAdress = "127.0.0.1"
     clientAdress = "172.29.224.1"
 
-    serverSocket = GoBackNSocket(serverPort, clientPort, serverAdress, 0.1, 1000, windowSize, 1)
-    clientSocket = GoBackNSocket(clientPort, serverPort, serverAdress, 0.1, 1000, windowSize, 1)
+    serverSocket = GoBackNSocket(serverPort, clientPort, serverAdress, 0.1, 1000, windowSize, 1, True)
+    clientSocket = GoBackNSocket(clientPort, serverPort, serverAdress, 0.1, 1000, windowSize, 1, True)
     f = open("lotr.txt", "r")
     msg = f.read(257500)
     f.close()
@@ -118,6 +118,6 @@ if __name__ == '__main__':
         fout.write(GoBackNSocket.receivedMsg)
     clientSocket.sock.stop()
 
-    csvFile = open("results.csv", "a", encoding="UTF8", newline='')
-    writer = csv.writer(csvFile)
-    writer.writerow([str(windowSize), t])
+    #csvFile = open("results.csv", "a", encoding="UTF8", newline='')
+    #writer = csv.writer(csvFile)
+    #writer.writerow([str(windowSize), t])
