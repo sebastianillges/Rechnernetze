@@ -19,6 +19,7 @@ class ServerThread(Thread):
         data = ""
         while True:
             try:
+                print(self.sock)
                 data = self.sock.recv(1024)                         # data is encoded
                 if not data:                                        # receiving empty messages means that the socket other side closed the socket
                     self.sock.close()

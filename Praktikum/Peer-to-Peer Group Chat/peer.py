@@ -26,9 +26,9 @@ class Peer():
             print('Message successfully sent')
         except socket.timeout:
             print('Socket timed out at', asctime())
-        self.sock.close()
-        self.sock = socket(AF_INET, SOCK_STREAM)
-        self.sock.connect((self.server_ip, self.server_port))
+        #self.sock.close()
+        #self.sock = socket(AF_INET, SOCK_STREAM)
+        #self.sock.connect((self.server_ip, self.server_port))
 
     def logout(self):
         pass
@@ -42,8 +42,8 @@ class Peer():
             print('Message successfully sent')
         except socket.timeout:
             print('Socket timed out at', asctime())
-        self.sock.close()
-        self.sock = socket(AF_INET, SOCK_STREAM)
-        self.sock.connect((self.server_ip, self.server_port))
+        #self.sock.close()
+        #self.sock = socket(AF_INET, SOCK_STREAM)
+        #self.sock.connect((self.server_ip, self.server_port))
     def send(self):
         pass
