@@ -52,7 +52,7 @@ class Server():
         self.sock.bind((server_ip, server_port))
         print(f'Listening on Port {self.serverPort} for incoming TCP connections to IP {self.serverIP}')
         self.run()
-        self.connection = ""
+        self.connection = socket
 
     def run(self):
         while True:
