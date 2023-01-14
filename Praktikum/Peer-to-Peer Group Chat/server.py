@@ -22,6 +22,7 @@ class ServerThread(Thread):
                 if not data:                                        # receiving empty messages means that the socket other side closed the socket
                     self.sock.close()
                     print(f"{self.addr[0]} closed the connection")
+                    break
             except socket.timeout:
                 print('Socket timed out at', asctime())
 
