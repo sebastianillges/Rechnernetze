@@ -34,9 +34,9 @@ class ServerThread(Thread):
 
     def eval_msg(self, msg: list):
         if msg[0] == "r":                                           # client wants to register
-            Server.register(Client(msg[0], msg[1], msg[2]))
+            Server.register(Client(msg[0], msg[1], msg[2]), self.sock)
         elif msg[0] == "l":                                         # client wants to log out
-            Server.logout(Client(msg[0], msg[1], msg[2]))
+            Server.logout(Client(msg[0], msg[1], msg[2]), self.sock)
         elif msg[0] == "b":
             Server.broadcast(self.server,msg)
 
@@ -44,6 +44,7 @@ class ServerThread(Thread):
 class Server():
 
     client_list = []
+    connection_list = []
 
     def __init__(self, server_ip, server_port):
         self.serverIP = server_ip
@@ -69,7 +70,7 @@ class Server():
                 except socket.timeout:
                     print('Socket timed out listening', asctime())
 
-    def register(client: Client):
+    def register(client: Client, connection: socket.socket):
         # arg: client of type Client
         # check if client already registered
         client_ip = client.get_ip()
@@ -79,11 +80,14 @@ class Server():
                 return
         # if not already registered add to global client list
         Server.client_list.append(client)
+        Server.connection_list.append(connection)
 
     def logout(client: Client):
         # arg: client of type Client
         # removes client from global list (doesn't matter if exists or not)
+        index = Server.client_list.index(client)
         Server.client_list.remove(client)
+        Server.connection_list.pop(index)
 
     def broadcast(self, msg: list):
         # arg: list representation of decoded message received from a client
@@ -91,6 +95,6 @@ class Server():
         client_ip = msg[2]
         client_port = msg[3]
         paket = msg[4].encode('utf-8')
-        #for c in Server.client_list:
-        #if not c.get_ip() == client_ip:
-        self.connection.sendall(paket)
+        for c in Server.client_list:
+            if not c.get_ip() == client_ip:
+                c.connection.send(paket)
