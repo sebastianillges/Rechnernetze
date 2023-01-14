@@ -64,8 +64,9 @@ class Server():
             while True:
                 try:
                     self.connection, addr = self.sock.accept()
+                    con = self.connection
                     print(f"Incoming connection accepted from {addr[0]} via {addr[1]}")
-                    newthread = ServerThread(addr, self.connection, self)
+                    newthread = ServerThread(addr, con, self)
                     newthread.start()
                 except socket.timeout:
                     print('Socket timed out listening', asctime())
