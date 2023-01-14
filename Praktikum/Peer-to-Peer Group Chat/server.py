@@ -8,7 +8,7 @@ from client import Client
 
 class ServerThread(Thread):
 
-    def __init__(self, addr, conn):
+    def __init__(self, addr, conn, server):
         Thread.__init__(self)
         self.sock = conn
         self.addr = addr
@@ -63,7 +63,7 @@ class Server():
                 try:
                     conn, addr = self.sock.accept()
                     print(f"Incoming connection accepted from {addr[0]} via {addr[1]}")
-                    newthread = ServerThread(addr, conn)
+                    newthread = ServerThread(addr, conn, self)
                     newthread.start()
                 except socket.timeout:
                     print('Socket timed out listening', asctime())
@@ -91,4 +91,4 @@ class Server():
         paket = msg[4]
         for c in Server.client_list:
             #if not c.get_ip() == client_ip:
-            Server.sock.send(paket)
+            self.sock.send(paket)
