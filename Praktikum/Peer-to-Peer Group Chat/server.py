@@ -91,6 +91,6 @@ class Server():
         client_ip = msg[2]
         client_port = msg[3]
         paket = msg[4].encode('utf-8')
-        for c in Server.client_list:
-            #if not c.get_ip() == client_ip:
-            self.sock.sendall(paket)
+        #for c in Server.client_list:
+        #if not c.get_ip() == client_ip:
+        self.connection.sendall(paket)
