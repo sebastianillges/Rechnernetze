@@ -82,7 +82,7 @@ class Server():
         Server.client_list.append(client)
         Server.connection_list.append(connection)
 
-    def logout(client: Client):
+    def logout(client: Client, connection: socket.socket):
         # arg: client of type Client
         # removes client from global list (doesn't matter if exists or not)
         index = Server.client_list.index(client)
@@ -96,5 +96,7 @@ class Server():
         client_port = msg[3]
         paket = msg[4].encode('utf-8')
         for c in Server.client_list:
-            if not c.get_ip() == client_ip:
-                c.connection.send(paket)
+            index = Server.client_list.index(c)
+            connection = Server.connection_list[index]
+            #if not c.get_ip() == client_ip:
+            connection.send(paket)
