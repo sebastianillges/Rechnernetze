@@ -49,7 +49,7 @@ class Server():
         self.serverPort = server_port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.bind((server_ip, server_port))
-        print('Listening on Port ', self.serverPort, ' for incoming TCP connections')
+        print(f'Listening on Port {self.serverPort} for incoming TCP connections to IP {self.serverIP}')
         self.run()
 
     def run(self):
