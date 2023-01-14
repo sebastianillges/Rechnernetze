@@ -39,9 +39,6 @@ class ServerThread(Thread):
             Server.broadcast(msg)
 
 
-
-
-
 class Server():
 
     client_list = []
@@ -85,8 +82,11 @@ class Server():
         # removes client from global list (doesn't matter if exists or not)
         Server.client_list.remove(client)
 
-    def broadcast(msg: list):
+    def broadcast(self, msg: list):
         # arg: list representation of decoded message received from a client
         # broadcasts the message to all registered clients
-
-        pass
+        client_ip = msg[2]
+        paket = msg[4]
+        for c in Server.client_list:
+            #if not c.get_ip() == client_ip:
+            self.sock.send(paket)
