@@ -37,18 +37,18 @@ class ServerThread(Thread):
         elif msg[0] == "l":                                         # client wants to log out
             Server.logout(Client(msg[0], msg[1], msg[2]))
         elif msg[0] == "b":
-            Server.broadcast(msg)
+            Server.broadcast(self, msg)
 
 
 class Server():
 
     client_list = []
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def __init__(self, server_ip, server_port):
         self.serverIP = server_ip
         self.serverPort = server_port
-        Server.sock.bind((server_ip, server_port))
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sock.bind((server_ip, server_port))
         print(f'Listening on Port {self.serverPort} for incoming TCP connections to IP {self.serverIP}')
         self.run()
 
@@ -83,7 +83,7 @@ class Server():
         # removes client from global list (doesn't matter if exists or not)
         Server.client_list.remove(client)
 
-    def broadcast(msg: list):
+    def broadcast(self, msg: list):
         # arg: list representation of decoded message received from a client
         # broadcasts the message to all registered clients
         client_ip = msg[2]
