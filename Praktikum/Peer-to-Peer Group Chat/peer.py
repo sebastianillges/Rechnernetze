@@ -27,6 +27,7 @@ class Peer():
         except socket.timeout:
             print('Socket timed out at', asctime())
         self.sock.close()
+        self.sock = socket(AF_INET, SOCK_STREAM)
 
     def logout(self):
         pass
@@ -35,7 +36,7 @@ class Peer():
         print(f"{self.nickname} trying to broadcast to server {self.server_ip} via port {self.server_port}")
         self.sock.connect((self.server_ip, self.server_port))
         paket = Protocol_Client_Server("b", self.nickname, self.ip, self.udp_port, msg).get_encoded_package()
-        self.sock.send(paket)
+        print(paket)
         try:
             self.sock.send(paket)
             print('Message successfully sent')

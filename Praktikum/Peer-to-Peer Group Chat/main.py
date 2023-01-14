@@ -21,4 +21,4 @@ if __name__ == '__main__':
         elif argv[1] == "peer":
             peer = Peer("peer", peer_ip, 5000, 5001, server_ip, server_port)
 
-    #peer.broadcast()
+    peer.broadcast("test")
