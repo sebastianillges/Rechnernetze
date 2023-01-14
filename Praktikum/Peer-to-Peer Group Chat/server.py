@@ -12,6 +12,7 @@ class ServerThread(Thread):
         Thread.__init__(self)
         self.sock = conn
         self.addr = addr
+        self.server = server
         print (f"Server thread {self.ident} connected to {addr[0]} via {addr[1]}")
 
     def run(self):
@@ -37,7 +38,7 @@ class ServerThread(Thread):
         elif msg[0] == "l":                                         # client wants to log out
             Server.logout(Client(msg[0], msg[1], msg[2]))
         elif msg[0] == "b":
-            Server.broadcast(self, msg)
+            Server.broadcast(self.server,msg)
 
 
 class Server():
