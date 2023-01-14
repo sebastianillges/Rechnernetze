@@ -89,8 +89,8 @@ class Server():
         # arg: list representation of decoded message received from a client
         # broadcasts the message to all registered clients
         client_ip = msg[2]
+        client_port = msg[3]
         paket = msg[4].encode('utf-8')
         for c in Server.client_list:
             #if not c.get_ip() == client_ip:
-            self.sock.connect((client_ip, self.serverPort))
-            self.sock.send(paket)
+            self.sock.sendall(paket)
