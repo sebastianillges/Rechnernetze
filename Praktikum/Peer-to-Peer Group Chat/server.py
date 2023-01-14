@@ -15,20 +15,22 @@ class ServerThread(Thread):
         print (f"Server thread {self.ident} connected to {addr[0]} via {addr[1]}")
 
     def run(self):
+        data = ""
         while True:
             try:
                 data = self.sock.recv(1024)                         # data is encoded
                 if not data:                                        # receiving empty messages means that the socket other side closed the socket
                     self.sock.close()
                     print(f"{self.addr[0]} closed the connection")
-                    # received data is of type Protocol_Client_Server because it can only come from a client
-                    msg_decoded = Protocol_Client_Server.get_decoded_package(data)
-                    print(msg_decoded)
-                    self.eval_msg(msg_decoded)
             except socket.timeout:
                 print('Socket timed out at', asctime())
 
-    def eval_msg(msg: list):
+            # received data is of type Protocol_Client_Server because it can only come from a client
+            msg_decoded = Protocol_Client_Server.get_decoded_package(data)
+            print(msg_decoded)
+            self.eval_msg(msg_decoded)
+
+    def eval_msg(self, msg: list):
         if msg[0] == "r":                                           # client wants to register
             Server.register(Client(msg[0], msg[1], msg[2]))
         elif msg[0] == "l":                                         # client wants to log out
@@ -88,12 +90,3 @@ class Server():
         # broadcasts the message to all registered clients
 
         pass
-
-
-if __name__ == '__main__':
-    serverIP = gethostbyname_ex(getfqdn())[2][0]
-    serverPort = 50000
-    timeout = 300
-
-    server = Server(serverIP, serverPort)
-    server.run()
