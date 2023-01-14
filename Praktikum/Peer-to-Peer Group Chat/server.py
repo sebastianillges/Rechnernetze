@@ -99,4 +99,4 @@ class Server():
             index = Server.client_list.index(c)
             connection = Server.connection_list[index]
             #if not c.get_ip() == client_ip:
-            connection.send(paket)
+            self.connection.send(paket)
