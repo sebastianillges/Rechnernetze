@@ -36,7 +36,7 @@ class ServerThread(Thread):
         if msg[0] == "r":                                           # client wants to register
             Server.register(Client(msg[0], msg[1], msg[2]), self.sock)
         elif msg[0] == "l":                                         # client wants to log out
-            Server.logout(Client(msg[0], msg[1], msg[2]), self.sock)
+            Server.logout(Client(msg[0], msg[1], msg[2]))
         elif msg[0] == "b":
             Server.broadcast(self.server,msg)
 
@@ -82,7 +82,7 @@ class Server():
         Server.client_list.append(client)
         Server.connection_list.append(connection)
 
-    def logout(client: Client, connection: socket.socket):
+    def logout(client: Client):
         # arg: client of type Client
         # removes client from global list (doesn't matter if exists or not)
         index = Server.client_list.index(client)
