@@ -34,7 +34,7 @@ class ServerThread(Thread):
 
     def eval_msg(self, msg: list):
         if msg[0] == "r":                                           # client wants to register
-            Server.register(Client(msg[0], msg[1], msg[2]), self.sock)
+            Server.register(Client(msg[0], msg[1], msg[2]), self.server.connection)
         elif msg[0] == "l":                                         # client wants to log out
             Server.logout(Client(msg[0], msg[1], msg[2]))
         elif msg[0] == "b":
@@ -99,4 +99,4 @@ class Server():
             index = Server.client_list.index(c)
             connection = Server.connection_list[index]
             #if not c.get_ip() == client_ip:
-            self.connection.send(paket)
+            connection.send(paket)
