@@ -29,8 +29,8 @@ class ServerThread(Thread):
 
             # received data is of type Protocol_Client_Server because it can only come from a client
             msg_decoded = Protocol_Client_Server.get_decoded_package(data)
-            print(msg_decoded)
             self.eval_msg(msg_decoded)
+
 
     def eval_msg(self, msg: list):
         if msg[0] == "r":                                           # client wants to register
@@ -50,9 +50,9 @@ class Server():
         self.serverPort = server_port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.bind((server_ip, server_port))
+        self.connection = socket.socket
         print(f'Listening on Port {self.serverPort} for incoming TCP connections to IP {self.serverIP}')
         self.run()
-        self.connection = socket
 
     def run(self):
         while True:
