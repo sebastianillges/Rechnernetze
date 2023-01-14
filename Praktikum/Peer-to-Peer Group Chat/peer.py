@@ -15,8 +15,10 @@ class Peer():
         self.server_port = server_port
         self.client_list = []
         self.sock = socket(AF_INET, SOCK_STREAM)
+        self.register()
 
     def register(self):
+        print(f"Trying to connect and register on server {self.server_ip} via port {self.server_port}")
         self.sock.connect((self.server_ip, self.server_port))
         paket = Protocol_Client_Server("r", self.nickname, self.ip, self.udp_port).get_encoded_package()
         self.sock.send(paket)

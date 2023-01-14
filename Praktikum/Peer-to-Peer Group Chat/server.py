@@ -11,19 +11,19 @@ class ServerThread(Thread):
     def __init__(self, addr, conn):
         Thread.__init__(self)
         self.sock = conn
-        print ("New connection added: ", addr)
+        self.addr = addr
+        print (f"Server thread {self.ident} connected to {addr[0]} via {addr[1]}")
 
     def run(self):
         while True:
             try:
                 data = self.sock.recv(1024)                         # data is encoded
                 if not data:                                        # receiving empty messages means that the socket other side closed the socket
-                    print('Connection closed from other side')
-                    print('Closing ...')
                     self.sock.close()
-                    print("Connection closed")
+                    print(f"{self.addr[0]} closed the connection")
                     # received data is of type Protocol_Client_Server because it can only come from a client
                     msg_decoded = Protocol_Client_Server.get_decoded_package(data)
+                    print(msg_decoded)
                     self.eval_msg(msg_decoded)
             except socket.timeout:
                 print('Socket timed out at', asctime())
@@ -61,7 +61,7 @@ class Server():
             while True:
                 try:
                     conn, addr = self.sock.accept()
-                    print('Incoming connection accepted: ', addr)
+                    print(f"Incoming connection accepted from {addr[0]} via {addr[1]}")
                     newthread = ServerThread(addr, conn)
                     newthread.start()
                 except socket.timeout:
