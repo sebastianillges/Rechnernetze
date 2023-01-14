@@ -52,6 +52,7 @@ class Server():
         self.sock.bind((server_ip, server_port))
         print(f'Listening on Port {self.serverPort} for incoming TCP connections to IP {self.serverIP}')
         self.run()
+        self.connection = ""
 
     def run(self):
         while True:
@@ -61,9 +62,9 @@ class Server():
 
             while True:
                 try:
-                    conn, addr = self.sock.accept()
+                    self.connection, addr = self.sock.accept()
                     print(f"Incoming connection accepted from {addr[0]} via {addr[1]}")
-                    newthread = ServerThread(addr, conn, self)
+                    newthread = ServerThread(addr, self.connection, self)
                     newthread.start()
                 except socket.timeout:
                     print('Socket timed out listening', asctime())
@@ -88,7 +89,7 @@ class Server():
         # arg: list representation of decoded message received from a client
         # broadcasts the message to all registered clients
         client_ip = msg[2]
-        paket = msg[4]
+        paket = msg[4].encode('utf-8')
         for c in Server.client_list:
             #if not c.get_ip() == client_ip:
-            self.sock.send(paket)
+            self.connection.send(paket)
