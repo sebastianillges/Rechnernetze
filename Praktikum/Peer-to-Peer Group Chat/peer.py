@@ -134,6 +134,7 @@ class Peer():
                 self.client_list.remove(list[0])
 
     def send_request(self, nickname):
+        self.udp_sock.bind((self.ip, self.udp_port))
         client_ip = 0
         client_port = 0
         for c in self.client_list:
