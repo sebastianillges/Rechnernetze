@@ -8,7 +8,7 @@ class Protocol_Client_Request():
         self.ip = ip
 
     def get_encoded_package(self):
-        encoded_msg = self.command + "|" + self.tcp_port + "|" + self.ip
+        encoded_msg = str(self.command + "|" + self.tcp_port + "|" + self.ip)
         return encoded_msg.encode('utf-8')
 
     def get_decoded_package(msg: str):
