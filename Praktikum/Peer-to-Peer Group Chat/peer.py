@@ -107,7 +107,7 @@ class Peer():
                 self.print_lock.acquire()
                 print(f"{list[0].get_nickname()} logged out")
                 self.print_lock.release()
-                self.client_list.remove(list)
+                self.client_list.remove(list[0])
 
     def send(self):
         pass

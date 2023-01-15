@@ -24,7 +24,7 @@ class ServerThread(Thread):
                 if not data:                                        # receiving empty messages means that the socket other side closed the socket
                     sys.exit()
             except:
-                print("Connection closed from outside")
+                print(f"Connection to {self.addr[0]} closed from outside")
                 return
 
             # received data is of type Protocol_Client_Server because it can only come from a client
@@ -40,6 +40,7 @@ class ServerThread(Thread):
             Server.logout(client)
         elif msg[0] == "b":
             Server.broadcast(self.server, msg)
+        print(Server.client_list)
 
 
 class Server():
@@ -104,6 +105,7 @@ class Server():
             if c.get_ip() == client_ip:
                 break
             index += 1
+        print(f"{Server.client_list[index].get_nickname()} will sich verpissen")
         Server.client_list.pop(index)
         connection = Server.connection_list.pop(index)
 
@@ -114,7 +116,6 @@ class Server():
             con.send(update_logout_client)
 
         print(f"Client {client_ip} logged out")
-
         connection.close()
 
     def broadcast(self, msg: list):
