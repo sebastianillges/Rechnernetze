@@ -6,7 +6,7 @@ My_PORT = 50000
 server_activity_period=30 # Zeit, wie lange der Server aktiv sein soll
 
 sock = socket.socket(socket.AF_INET, 
-                     socket.SOCK_DGRAM) 
+                     socket.SOCK_DGRAM)
 sock.bind((My_IP, My_PORT))
 
 sock.settimeout(10)

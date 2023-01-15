@@ -6,6 +6,8 @@ from protocol_client_server import Protocol_Client_Server
 from protocol_client_client import Protocol_Client_Client
 from protocol_server_client import Protocol_Server_Client
 from protocol_broadcast import Protocol_Broadcast
+from protocol_client_request import Protocol_Client_Request
+from client import Client
 from time import sleep
 
 
@@ -21,18 +23,19 @@ class Peer():
         self.server_ip = server_ip
         self.server_port = server_port
         self.client_list = []
-        self.sock = socket(AF_INET, SOCK_STREAM)
+        self.tcp_sock = socket(AF_INET, SOCK_STREAM)
+        self.udp_sock = socket(AF_INET, SOCK_STREAM)
         self.register()
-        self.newthread = threading.Thread(target=self.listen).start()
+        self.newthread = threading.Thread(target=self.listen_tcp).start()
 
     def register(self):
         self.print_lock.acquire()
         print(f"{self.nickname} trying to connect and register on server {self.server_ip} via port {self.tcp_port}")
         self.print_lock.release()
-        self.sock.connect((self.server_ip, self.server_port))
+        self.tcp_sock.connect((self.server_ip, self.server_port))
         paket = Protocol_Client_Server("r", self.nickname, self.ip, self.udp_port).get_encoded_package()
         try:
-            self.sock.send(paket)
+            self.tcp_sock.send(paket)
             self.print_lock.acquire()
             print('Register successfully sent')
             self.print_lock.release()
@@ -49,7 +52,7 @@ class Peer():
         self.print_lock.release()
         paket = Protocol_Client_Server("l", self.nickname, self.ip, self.udp_port).get_encoded_package()
         try:
-            self.sock.send(paket)
+            self.tcp_sock.send(paket)
             self.print_lock.acquire()
             print('Logout successfully sent')
             self.print_lock.release()
@@ -59,7 +62,7 @@ class Peer():
             print('Logout failed')
             self.print_lock.release()
         sleep(1)
-        self.sock.close()
+        self.tcp_sock.close()
 
     def broadcast(self, msg: str):
         self.print_lock.acquire()
@@ -67,7 +70,7 @@ class Peer():
         self.print_lock.release()
         paket = Protocol_Client_Server("b", self.nickname, self.ip, self.udp_port, msg).get_encoded_package()
         try:
-            self.sock.send(paket)
+            self.tcp_sock.send(paket)
             self.print_lock.acquire()
             print('Broadcast successfully sent')
             self.print_lock.release()
@@ -77,10 +80,10 @@ class Peer():
             self.print_lock.release()
         sleep(1)
 
-    def listen(self):
+    def listen_tcp(self):
         while True:
             try:
-                data = self.sock.recv(1024).decode('utf-8')
+                data = self.tcp_sock.recv(1024).decode('utf-8')
                 if not data:                                        # receiving empty messages means that the socket other side closed the socket
                     sys.exit()
                 else:
@@ -93,7 +96,19 @@ class Peer():
                 print(f"{self.ip} stopped listening")
                 self.print_lock.release()
                 return
-        self.listen()
+        self.listen_tcp()
+
+    def listen_udp(self):
+        self.udp_sock.bind((self.ip, self.udp_port))
+        while True:
+            try:
+                data, addr = self.tcp_sock.recvfrom(1024)
+                break
+            except:
+                print("hö")
+        data = data.decode('utf-8')
+        self.eval_msg(data)
+
 
     def eval_msg(self, data):
         if data[0] == "b":
@@ -101,6 +116,8 @@ class Peer():
             self.print_lock.acquire()
             print(f"Received message from {msg[1]}: {msg[2]}")
             self.print_lock.release()
+        elif data[0] == "v":
+            print(data)
         else:
             operatror, list = Protocol_Server_Client.get_decoded_package(data)
             if operatror == "+":
@@ -115,6 +132,18 @@ class Peer():
                 self.print_lock.release()
                 self.client_list.remove(list[0])
 
-    def send(self):
-        pass
+    def send_request(self, nickname):
+        client_ip = 0
+        client_port = 0
+        for c in self.client_list:
+            if c.get_nickname() == nickname:
+                client_ip = c.get_ip()
+                client_port = c.get_udp_port()
+        request = Protocol_Client_Request(self.tcp_port, self.ip).get_encoded_package()
+        self.tcp_sock.sendto(request, (client_ip, client_port))
+
+
+
+
+
 
