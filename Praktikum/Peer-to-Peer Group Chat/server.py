@@ -118,6 +118,6 @@ class Server():
         for c in Server.client_list:
             index = Server.client_list.index(c)
             connection = Server.connection_list[index]
-            #if not c.get_ip() == client_ip:
-            connection.send(paket)
-            print(f"Server broadcasting: \"{paket.decode('utf-8')}\" from {client_ip}!")
+            if not c.get_ip() == client_ip:
+                connection.send(paket)
+                print(f"Server broadcasting: \"{paket.decode('utf-8')}\" from {client_ip}!")

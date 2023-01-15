@@ -21,9 +21,9 @@ if __name__ == '__main__':
 
     if len(argv) > 1:
         if argv[1] == "server":
-            server = Server(server_ip, server_port)
+            server = Server(peer_ip, server_port)
         elif argv[1] == "peer":
-            peer = Peer("peer", peer_ip, 5000, 5001, server_ip, server_port)
+            peer = Peer("peer", "localhost", 5000, 5001, peer_ip, server_port)
 
     #atexit.register(exit_handler(peer))
     peer.broadcast("test")
@@ -32,4 +32,3 @@ if __name__ == '__main__':
         command_input = input()
         if command_input == "logout":
             peer.logout()
-    
