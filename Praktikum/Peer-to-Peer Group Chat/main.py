@@ -35,4 +35,4 @@ if __name__ == '__main__':
         elif command_input == "b":
             peer.broadcast(input())
         elif command_input == "s":
-            peer.broadcast(input())
+            peer.send_request(input())

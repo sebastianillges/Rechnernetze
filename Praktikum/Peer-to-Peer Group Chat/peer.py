@@ -124,7 +124,7 @@ class Peer():
                 self.print_lock.acquire()
                 for c in list:
                     print(f"{c.get_nickname()} is logged in")
-                self.client_list.append(list)
+                    self.client_list.append(c)
                 self.print_lock.release()
             elif operatror == "-":
                 self.print_lock.acquire()
