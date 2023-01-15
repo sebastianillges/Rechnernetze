@@ -41,6 +41,7 @@ class ServerThread(Thread):
         elif msg[0] == "b":
             Server.broadcast(self.server, msg)
         print(Server.client_list)
+        print(Server.connection_list)
 
 
 class Server():
@@ -116,7 +117,7 @@ class Server():
             con.send(update_logout_client)
 
         print(f"Client {client_ip} logged out")
-        connection.close()
+        #connection.close()
 
     def broadcast(self, msg: list):
         # arg: list representation of decoded message received from a client
