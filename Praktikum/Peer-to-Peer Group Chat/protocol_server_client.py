@@ -10,7 +10,7 @@ class Protocol_Server_Client():
     def get_encoded_package(self):
         encoded_msg = ""
         for c in self.list:
-            encoded_msg = c.toString() + "|"
+            encoded_msg = encoded_msg + c.toString() + "|"
         encoded_msg = encoded_msg + self.command
         return encoded_msg.encode('utf-8')
 
