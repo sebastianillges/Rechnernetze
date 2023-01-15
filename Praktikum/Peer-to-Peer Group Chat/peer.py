@@ -137,7 +137,7 @@ class Peer():
                 self.client_list.remove(list[0])
 
     def send_request(self, nickname):
-        client_ip = 0
+        client_ip = ""
         client_port = 0
         for c in self.client_list:
             if c.get_nickname() == nickname:
