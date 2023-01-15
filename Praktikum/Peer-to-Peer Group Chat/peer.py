@@ -26,7 +26,8 @@ class Peer():
         self.tcp_sock = socket(AF_INET, SOCK_STREAM)
         self.udp_sock = socket(AF_INET, SOCK_STREAM)
         self.register()
-        self.newthread = threading.Thread(target=self.listen_tcp).start()
+        self.tcp_thread = threading.Thread(target=self.listen_tcp).start()
+        self.udp_thread = threading.Thread(target=self.listen_udp).start()
 
     def register(self):
         self.print_lock.acquire()
@@ -140,7 +141,7 @@ class Peer():
                 client_ip = c.get_ip()
                 client_port = int(c.get_udp_port())
         request = Protocol_Client_Request(str(self.tcp_port), self.ip).get_encoded_package()
-        self.tcp_sock.sendto(request, (client_ip, client_port))
+        self.udp_sock.sendto(request, (client_ip, client_port))
 
 
 
