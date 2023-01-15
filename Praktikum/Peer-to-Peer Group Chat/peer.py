@@ -102,6 +102,7 @@ class Peer():
 
     def listen_udp(self):
         self.udp_sock_receive.bind((self.ip, self.udp_port))
+        print(f"Bind({self.ip, self.udp_port}")
         while True:
             try:
                 data, addr = self.udp_sock_receive.recvfrom(1024)
@@ -144,8 +145,7 @@ class Peer():
                 client_port = int(c.get_udp_port())
         request = Protocol_Client_Request(str(self.tcp_port), self.ip).get_encoded_package()
         print(request)
-        print(client_ip)
-        print(client_port)
+        print(f"Send to({client_ip, client_port}")
         self.udp_sock_send.sendto(request, (client_ip, client_port))
 
 
