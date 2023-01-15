@@ -1,5 +1,6 @@
 import socket
-from threading import Thread
+import sys
+from threading import Thread, current_thread
 from time import time, asctime
 from socket import gethostbyname_ex, getfqdn
 from protocol_client_server import Protocol_Client_Server
@@ -13,20 +14,18 @@ class ServerThread(Thread):
         self.sock = conn
         self.addr = addr
         self.server = server
-        print (f"Server thread {self.ident} connected to {addr[0]} via {addr[1]}")
+        print (f"Server thread {current_thread().ident} connected to {addr[0]} via {addr[1]}")
 
     def run(self):
-        data = ""
         while True:
             try:
-                print(self.sock)
+                #print(self.sock)
                 data = self.sock.recv(1024)                         # data is encoded
                 if not data:                                        # receiving empty messages means that the socket other side closed the socket
-                    self.sock.close()
-                    print(f"{self.addr[0]} closed the connection")
-                    break
-            except socket.timeout:
-                print('Socket timed out at', asctime())
+                    sys.exit()
+            except:
+                print("Connection closed from outside")
+                return
 
             # received data is of type Protocol_Client_Server because it can only come from a client
             msg_decoded = Protocol_Client_Server.get_decoded_package(data)
@@ -34,12 +33,13 @@ class ServerThread(Thread):
 
 
     def eval_msg(self, msg: list):
+        client = Client(msg[1], msg[2], msg[3])
         if msg[0] == "r":                                           # client wants to register
-            Server.register(Client(msg[0], msg[1], msg[2]), self.server.connection)
+            Server.register(client, self.server.connection)
         elif msg[0] == "l":                                         # client wants to log out
-            Server.logout(Client(msg[0], msg[1], msg[2]))
+            Server.logout(client)
         elif msg[0] == "b":
-            Server.broadcast(self.server,msg)
+            Server.broadcast(self.server, msg)
 
 
 class Server():
@@ -81,14 +81,22 @@ class Server():
                 return
         # if not already registered add to global client list
         Server.client_list.append(client)
+        print(f"Client with ip: {client_ip} registered!")
         Server.connection_list.append(connection)
 
     def logout(client: Client):
         # arg: client of type Client
         # removes client from global list (doesn't matter if exists or not)
-        index = Server.client_list.index(client)
-        Server.client_list.remove(client)
-        Server.connection_list.pop(index)
+        client_ip = client.get_ip()
+        index = 0
+        for c in Server.client_list:
+            if c.get_ip() == client_ip:
+                break
+            index += 1
+        Server.client_list.pop(index)
+        connection = Server.connection_list.pop(index)
+        print(f"Client {client_ip} logged out")
+        connection.close()
 
     def broadcast(self, msg: list):
         # arg: list representation of decoded message received from a client
@@ -96,6 +104,7 @@ class Server():
         client_ip = msg[2]
         client_port = msg[3]
         paket = msg[4].encode('utf-8')
+        print(f"Client with ip: {client_ip} wants to broadcast {paket}!")
         for c in Server.client_list:
             index = Server.client_list.index(c)
             connection = Server.connection_list[index]

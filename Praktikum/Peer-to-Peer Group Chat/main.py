@@ -11,7 +11,8 @@ if __name__ == '__main__':
     # Windows: get own IP with gethostbyname_ex(getfqdn())[2][0]
     # Mac: get own IP with gethostbyname(gethostname())
     server_port = 50000
-    server_ip = "192.168.0.103"
+    #server_ip = "192.168.0.103"
+    server_ip = "localhost"
 
     peer_ip = get_pc_ip()
 
@@ -21,4 +22,7 @@ if __name__ == '__main__':
         elif argv[1] == "peer":
             peer = Peer("peer", peer_ip, 5000, 5001, server_ip, server_port)
 
+    sleep(1)
     peer.broadcast("test")
+    sleep(1)
+    peer.logout()
