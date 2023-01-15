@@ -101,8 +101,6 @@ class Peer():
 
     def listen_udp(self):
         self.udp_sock.bind((self.ip, self.udp_port))
-        print(self.ip)
-        print(self.udp_port)
         while True:
             try:
                 data, addr = self.udp_sock.recvfrom(1024)
