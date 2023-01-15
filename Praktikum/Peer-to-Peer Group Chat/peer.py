@@ -103,7 +103,7 @@ class Peer():
         self.udp_sock.bind((self.ip, self.udp_port))
         while True:
             try:
-                data, addr = self.tcp_sock.recvfrom(1024)
+                data, addr = self.udp_sock.recvfrom(1024)
                 break
             except:
                 print("hö")
