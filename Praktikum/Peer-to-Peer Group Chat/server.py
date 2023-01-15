@@ -117,7 +117,7 @@ class Server():
             con.send(update_logout_client)
 
         print(f"Client {client_ip} logged out")
-        connection.close()
+        #connection.close()
 
     def broadcast(self, msg: list):
         # arg: list representation of decoded message received from a client
