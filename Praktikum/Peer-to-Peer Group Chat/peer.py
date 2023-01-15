@@ -13,6 +13,7 @@ class Peer():
 
     def __init__(self, nickname, ip, udp_port, tcp_port, server_ip, server_port):
         self.print_lock = threading.Lock()
+        self.LOGGEDIN = False
         self.nickname = nickname
         self.ip = ip
         self.udp_port = udp_port
@@ -35,6 +36,7 @@ class Peer():
             self.print_lock.acquire()
             print('Register successfully sent')
             self.print_lock.release()
+            self.LOGGEDIN = True
         except:
             self.print_lock.acquire()
             print('Register failed')
@@ -52,6 +54,7 @@ class Peer():
             self.print_lock.acquire()
             print('Logout successfully sent')
             self.print_lock.release()
+            self.LOGGEDIN = False
         except:
             self.print_lock.acquire()
             print('Logout failed')
@@ -86,6 +89,8 @@ class Peer():
                     threading.Thread(target=self.eval_msg(data)).start()
                     break
             except:
+                if self.LOGGEDIN:
+                    break
                 self.print_lock.acquire()
                 print(f"{self.ip} stopped listening")
                 self.print_lock.release()
