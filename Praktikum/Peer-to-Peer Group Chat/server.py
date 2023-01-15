@@ -40,8 +40,6 @@ class ServerThread(Thread):
             Server.logout(client)
         elif msg[0] == "b":
             Server.broadcast(self.server, msg)
-        print(Server.client_list)
-        print(Server.connection_list)
 
 
 class Server():
@@ -93,7 +91,9 @@ class Server():
         Server.connection_list.append(connection)
 
         # send the List of all clients to the new registered client
+        print(Server.client_list)
         update_list_msg = Protocol_Server_Client(Server.client_list, "+").get_encoded_package()
+        print(update_list_msg)
         connection.send(update_list_msg)
 
 
@@ -116,8 +116,7 @@ class Server():
             con = Server.connection_list[index]
             con.send(update_logout_client)
 
-        print(f"Client {client_ip} logged out")
-        #connection.close()
+        print(f"Client {client_ip} trying to log out")
 
     def broadcast(self, msg: list):
         # arg: list representation of decoded message received from a client

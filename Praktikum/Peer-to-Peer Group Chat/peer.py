@@ -42,7 +42,6 @@ class Peer():
             print('Register failed')
             self.print_lock.release()
         sleep(1)
-        print(self.sock)
 
     def logout(self):
         self.print_lock.acquire()
@@ -60,7 +59,6 @@ class Peer():
             print('Logout failed')
             self.print_lock.release()
         sleep(1)
-        print(self.sock)
         self.sock.close()
 
     def broadcast(self, msg: str):
