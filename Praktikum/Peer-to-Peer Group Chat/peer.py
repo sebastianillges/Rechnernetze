@@ -86,11 +86,10 @@ class Peer():
                 self.print_lock.acquire()
                 print("Connection closed from outside")
                 self.print_lock.release()
-                break
+                return
         self.listen()
 
     def eval_msg(self, data):
-        print(data)
         if data[0] == "b":
             msg = Protocol_Broadcast.get_decoded_package(data)
             self.print_lock.acquire()

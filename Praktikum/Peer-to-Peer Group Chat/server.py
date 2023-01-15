@@ -106,7 +106,15 @@ class Server():
             index += 1
         Server.client_list.pop(index)
         connection = Server.connection_list.pop(index)
+
+        for c in Server.client_list:
+            update_logout_client = Protocol_Server_Client([client], "-").get_encoded_package()
+            index = Server.client_list.index(c)
+            con = Server.connection_list[index]
+            con.send(update_logout_client)
+
         print(f"Client {client_ip} logged out")
+
         connection.close()
 
     def broadcast(self, msg: list):

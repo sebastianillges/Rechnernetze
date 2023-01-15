@@ -10,7 +10,7 @@ from time import sleep
 from sys import argv
 #import atexit
 
-def exit_handler(self: Peer):
+def exit_handler(self):
     self.logout()
 
 if __name__ == '__main__':
