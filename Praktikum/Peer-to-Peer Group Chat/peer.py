@@ -26,7 +26,7 @@ class Peer():
         self.tcp_sock = socket(AF_INET, SOCK_STREAM)
         self.udp_sock_receive = socket(AF_INET, SOCK_DGRAM)
         self.udp_sock_send = socket(AF_INET, SOCK_DGRAM)
-        self.udp_sock_send.settimeout(10)
+        self.udp_sock_send.settimeout(100)
         self.register()
         self.tcp_thread = threading.Thread(target=self.listen_tcp).start()
         self.udp_thread = threading.Thread(target=self.listen_udp).start()
@@ -104,7 +104,7 @@ class Peer():
     def listen_udp(self):
         self.udp_sock_receive.bind((self.ip, self.udp_port))
         print(f"Bind({self.ip, self.udp_port}")
-        self.udp_sock_receive.settimeout(10)
+        self.udp_sock_receive.settimeout(100)
         while True:
             try:
                 data, addr = self.udp_sock_receive.recvfrom(1024)
