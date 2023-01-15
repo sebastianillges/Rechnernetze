@@ -14,7 +14,7 @@ def exit_handler(self):
     self.logout()
 
 if __name__ == '__main__':
-    server_port = 50000
+    server_port = 20000
     server_ip = "192.168.0.208"
 
     peer_ip = get_pc_ip()
@@ -23,7 +23,7 @@ if __name__ == '__main__':
         if argv[1] == "server":
             server = Server(server_ip, server_port)
         elif argv[1] == "peer":
-            peer = Peer("peer", "localhost", 5000, 50000, server_ip, server_port)
+            peer = Peer("peer", "localhost", 50001, 20001, server_ip, server_port)
 
     #atexit.register(exit_handler(peer))
     peer.broadcast("test")
