@@ -103,6 +103,7 @@ class Peer():
         self.udp_sock.bind((self.ip, self.udp_port))
         while True:
             try:
+                print("try")
                 data, addr = self.udp_sock.recvfrom(1024)
                 break
             except:
@@ -143,8 +144,6 @@ class Peer():
                 client_port = int(c.get_udp_port())
         request = Protocol_Client_Request(str(self.tcp_port), self.ip).get_encoded_package()
         print(request)
-        print(client_ip)
-        print(client_port)
         self.udp_sock.sendto(request, (client_ip, client_port))
 
 
