@@ -32,3 +32,5 @@ if __name__ == '__main__':
         command_input = input()
         if command_input == "logout":
             peer.logout()
+        elif command_input == "b":
+            peer.broadcast(input())
