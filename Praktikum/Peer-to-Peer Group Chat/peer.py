@@ -108,11 +108,12 @@ class Peer():
             except:
                 print("hö")
         data = data.decode('utf-8')
+        print(f"{data} in listen_upd")
         self.eval_msg(data)
 
 
     def eval_msg(self, data):
-        print(data)
+        print(f"{data} in eval_msg")
         if data[0] == "b":
             msg = Protocol_Broadcast.get_decoded_package(data)
             self.print_lock.acquire()
