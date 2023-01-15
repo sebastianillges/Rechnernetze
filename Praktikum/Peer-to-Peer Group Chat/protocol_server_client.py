@@ -3,25 +3,22 @@ from utility import num_clients_to_int
 
 class Protocol_Server_Client():
 
-    def __init__(self, numClients, list):
-        self.numClients = numClients
+    def __init__(self, list, command):
         self.list = list
+        self.command = command
 
     def get_encoded_package(self):
         encoded_msg = ""
-        id = str(self.numClients).zfill(4)
-        encoded_msg = encoded_msg + id
         for c in self.list:
-            encoded_msg = encoded_msg + "|" + c.toString()
+            encoded_msg = c.toString() + "|"
+        encoded_msg = encoded_msg + self.command
         return encoded_msg.encode('utf-8')
 
-    def get_decoded_package(msg):
-        packageDecoded = msg.decode('utf-8')
-        data_list = packageDecoded.split('|')
-        num_clients = num_clients_to_int(data_list[0])
-        client_list = [num_clients]
-        for i in range(1, len(data_list)):
+    def get_decoded_package(msg: str):
+        data_list = msg.split('|')
+        client_list = []
+        for i in range(0, len(data_list) - 1):
             client = data_list[i].split(',')
             client_list.append(Client(client[0], client[1], client[2]))
-        return client_list
+        return (data_list[len(data_list) - 1], client_list)
 

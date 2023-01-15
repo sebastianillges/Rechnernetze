@@ -5,11 +5,12 @@ from time import time, asctime
 from socket import gethostbyname_ex, getfqdn
 from protocol_client_server import Protocol_Client_Server
 from protocol_server_client import Protocol_Server_Client
+from protocol_broadcast import Protocol_Broadcast
 from client import Client
 
 class ServerThread(Thread):
 
-    def __init__(self, addr, conn, server):
+    def __init__(self, conn, addr, server):
         Thread.__init__(self)
         self.sock = conn
         self.addr = addr
@@ -19,8 +20,7 @@ class ServerThread(Thread):
     def run(self):
         while True:
             try:
-                #print(self.sock)
-                data = self.sock.recv(1024)                         # data is encoded
+                data = self.sock.recv(1024).decode('utf-8')                      # data is encoded
                 if not data:                                        # receiving empty messages means that the socket other side closed the socket
                     sys.exit()
             except:
@@ -53,20 +53,18 @@ class Server():
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.bind((server_ip, server_port))
         self.connection = socket.socket
-        print(f'Listening on Port {self.serverPort} for incoming TCP connections to IP {self.serverIP}')
+        print(f'Server listening on Port {self.serverPort} for incoming TCP connections to IP {self.serverIP}')
         self.run()
 
     def run(self):
         while True:
-
             self.sock.listen(1)
             print('Listening ...')
-
             while True:
                 try:
                     self.connection, addr = self.sock.accept()
                     print(f"Incoming connection accepted from {addr[0]} via {addr[1]}")
-                    newthread = ServerThread(addr, self.connection, self)
+                    newthread = ServerThread(self.connection, addr, self)
                     newthread.start()
                 except socket.timeout:
                     print('Socket timed out listening', asctime())
@@ -79,10 +77,23 @@ class Server():
             if c.get_ip() == client_ip:
                 print(f"Client with ip: {client_ip} already registered!")
                 return
+
+        # send new client to all registered clients
+        for c in Server.client_list:
+            update_new_client = Protocol_Server_Client([client], "+").get_encoded_package()
+            index = Server.client_list.index(c)
+            con = Server.connection_list[index]
+            con.send(update_new_client)
+
         # if not already registered add to global client list
         Server.client_list.append(client)
         print(f"Client with ip: {client_ip} registered!")
         Server.connection_list.append(connection)
+
+        # send the List of all clients to the new registered client
+        update_list_msg = Protocol_Server_Client(Server.client_list, "+").get_encoded_package()
+        connection.send(update_list_msg)
+
 
     def logout(client: Client):
         # arg: client of type Client
@@ -101,12 +112,12 @@ class Server():
     def broadcast(self, msg: list):
         # arg: list representation of decoded message received from a client
         # broadcasts the message to all registered clients
+        paket = Protocol_Broadcast(msg[1], msg[4]).get_encoded_package()
         client_ip = msg[2]
-        client_port = msg[3]
-        paket = msg[4].encode('utf-8')
-        print(f"Client with ip: {client_ip} wants to broadcast {paket}!")
+        print(f"Client with ip: {client_ip} wants to broadcast \"{paket.decode('utf-8')}\"!")
         for c in Server.client_list:
             index = Server.client_list.index(c)
             connection = Server.connection_list[index]
             #if not c.get_ip() == client_ip:
             connection.send(paket)
+            print(f"Server broadcasting: \"{paket.decode('utf-8')}\" from {client_ip}!")

@@ -10,6 +10,8 @@ def num_clients_to_int(id):
 
 
 def get_pc_ip():
+    # Windows: get own IP with gethostbyname_ex(getfqdn())[2][0]
+    # Mac: get own IP with gethostbyname(gethostname())
     if platform == "linux" or platform == "linux2" or platform == "darwin":  # linux or OS X
         peer_ip = gethostbyname(gethostname())
     elif platform == "win32":  # Windows...
