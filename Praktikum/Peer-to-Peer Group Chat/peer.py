@@ -56,7 +56,6 @@ class Peer():
             print('Logout failed')
             self.print_lock.release()
         sleep(1)
-        self.sock.close()
 
     def broadcast(self, msg: str):
         self.print_lock.acquire()
