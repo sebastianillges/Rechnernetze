@@ -103,7 +103,6 @@ class Peer():
         self.udp_sock.bind((self.ip, self.udp_port))
         while True:
             try:
-                print("try")
                 data, addr = self.udp_sock.recvfrom(1024)
                 data = data.decode('utf-8')
                 print(f"{data} in listen_upd")
