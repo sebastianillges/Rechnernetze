@@ -1,6 +1,6 @@
 import sys
 import threading
-from socket import socket, AF_INET, SOCK_STREAM
+from socket import socket, AF_INET, SOCK_STREAM, SOCK_DGRAM
 from time import asctime
 from protocol_client_server import Protocol_Client_Server
 from protocol_client_client import Protocol_Client_Client
@@ -24,7 +24,7 @@ class Peer():
         self.server_port = server_port
         self.client_list = []
         self.tcp_sock = socket(AF_INET, SOCK_STREAM)
-        self.udp_sock = socket(AF_INET, SOCK_STREAM)
+        self.udp_sock = socket(AF_INET, SOCK_DGRAM)
         self.register()
         self.tcp_thread = threading.Thread(target=self.listen_tcp).start()
         self.udp_thread = threading.Thread(target=self.listen_udp).start()
