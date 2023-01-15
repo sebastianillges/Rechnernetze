@@ -24,8 +24,8 @@ class Peer():
         self.server_port = server_port
         self.client_list = []
         self.tcp_sock = socket(AF_INET, SOCK_STREAM)
-        self.udp_sock = socket(AF_INET, SOCK_DGRAM)
-        self.udp_sock.bind((self.ip, self.udp_port))
+        self.udp_sock_receive = socket(AF_INET, SOCK_DGRAM)
+        self.udp_sock_send = socket(AF_INET, SOCK_DGRAM)
         self.register()
         self.tcp_thread = threading.Thread(target=self.listen_tcp).start()
         self.udp_thread = threading.Thread(target=self.listen_udp).start()
@@ -101,9 +101,10 @@ class Peer():
         self.listen_tcp()
 
     def listen_udp(self):
+        self.udp_sock_receive.bind((self.ip, self.udp_port))
         while True:
             try:
-                data, addr = self.udp_sock.recvfrom(1024)
+                data, addr = self.udp_sock_receive.recvfrom(1024)
                 data = data.decode('utf-8')
                 print(f"{data} in listen_upd")
                 self.eval_msg(data)
@@ -145,7 +146,7 @@ class Peer():
         print(request)
         print(client_ip)
         print(client_port)
-        self.udp_sock.sendto(request, (client_ip, client_port))
+        self.udp_sock_send.sendto(request, (client_ip, client_port))
 
 
 
