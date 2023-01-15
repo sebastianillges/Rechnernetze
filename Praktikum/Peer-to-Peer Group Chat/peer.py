@@ -87,7 +87,7 @@ class Peer():
                     break
             except:
                 self.print_lock.acquire()
-                print(f"Connection from {self.ip} to {self.server_ip} closed from outside")
+                print(f"{self.ip} stopped listening")
                 self.print_lock.release()
                 return
         self.listen()
