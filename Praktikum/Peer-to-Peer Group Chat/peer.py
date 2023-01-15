@@ -138,7 +138,7 @@ class Peer():
         for c in self.client_list:
             if c.get_nickname() == nickname:
                 client_ip = c.get_ip()
-                client_port = c.get_udp_port()
+                client_port = int(c.get_udp_port())
         request = Protocol_Client_Request(str(self.tcp_port), self.ip).get_encoded_package()
         self.tcp_sock.sendto(request, (client_ip, client_port))
 
