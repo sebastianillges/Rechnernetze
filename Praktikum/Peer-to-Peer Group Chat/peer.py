@@ -113,14 +113,13 @@ class Peer():
 
 
     def eval_msg(self, data):
-        print(f"{data} in eval_msg")
         if data[0] == "b":
             msg = Protocol_Broadcast.get_decoded_package(data)
             self.print_lock.acquire()
             print(f"Received message from {msg[1]}: {msg[2]}")
             self.print_lock.release()
         elif data[0] == "v":
-            print(data)
+            print(f"{data} in eval_msg")
         else:
             operatror, list = Protocol_Server_Client.get_decoded_package(data)
             if operatror == "+":
