@@ -105,12 +105,12 @@ class Peer():
             try:
                 print("try")
                 data, addr = self.udp_sock.recvfrom(1024)
+                data = data.decode('utf-8')
+                print(f"{data} in listen_upd")
+                self.eval_msg(data)
                 break
             except:
                 print("hö")
-        data = data.decode('utf-8')
-        print(f"{data} in listen_upd")
-        self.eval_msg(data)
 
 
     def eval_msg(self, data):
