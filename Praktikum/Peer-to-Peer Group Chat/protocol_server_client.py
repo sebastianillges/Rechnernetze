@@ -1,6 +1,4 @@
 from client import Client
-from utility import num_clients_to_int
-
 class Protocol_Server_Client():
 
     def __init__(self, list, command):
