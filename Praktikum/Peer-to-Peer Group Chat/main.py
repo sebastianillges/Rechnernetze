@@ -9,15 +9,15 @@ def exit_handler(p):
 
 if __name__ == '__main__':
     server_port = 20000
-    server_ip = get_pc_ip()
-
-    #peer_ip = get_pc_ip()
 
     if len(argv) > 1:
         if argv[1] == "server":
+            server_ip = get_pc_ip()
             server = Server(server_ip, server_port)
         elif argv[1] == "peer":
-            peer = Peer("peer", "192.168.0.208", 18201, 20001, server_ip, server_port, 21001)
+            peer_ip = get_pc_ip()
+            # server ip muss manuell eingegeben werden
+            peer = Peer("peer", peer_ip, 18201, 20001, "xxx.xxx.xxx.xxx", server_port, 21001)
 
     while True:
         command_input = input()
@@ -31,5 +31,7 @@ if __name__ == '__main__':
         elif command_input == "DEBUG":
             for thread in enumerate():
                 print(thread.name)
+        elif command_input == "exit":
+            break
         else:
             peer.send_p2p(command_input)
