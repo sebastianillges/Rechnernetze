@@ -1,4 +1,5 @@
 import atexit
+import sys
 from socket import socket, AF_INET, SOCK_DGRAM
 from protocol_client_server import Protocol_Client_Server
 from protocol_server_client import Protocol_Server_Client
@@ -32,6 +33,7 @@ if __name__ == '__main__':
         command_input = input()
         if command_input == "logout":
             peer.logout()
+            sys.exit()
         elif command_input == "b":
             peer.broadcast(input())
         elif command_input == "s":
