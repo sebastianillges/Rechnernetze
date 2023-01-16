@@ -10,7 +10,6 @@ from protocol_client_request import Protocol_Client_Request
 from client import Client
 from time import sleep
 
-
 class Peer():
 
     def __init__(self, nickname, ip, udp_port, tcp_port, server_ip, server_port, p2p_port):
