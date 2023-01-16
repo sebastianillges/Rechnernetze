@@ -1,6 +1,3 @@
-from client import Client
-from utility import num_clients_to_int
-
 class Protocol_Broadcast():
 
     def __init__(self, name: str, msg):

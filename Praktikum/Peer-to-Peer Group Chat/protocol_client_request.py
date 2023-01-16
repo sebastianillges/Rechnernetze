@@ -1,5 +1,3 @@
-
-
 class Protocol_Client_Request():
 
     def __init__(self, tcp_port, ip):
