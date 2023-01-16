@@ -20,8 +20,6 @@ if __name__ == '__main__':
             peer = Peer("peer", "192.168.0.208", 18201, 20001, server_ip, server_port, 21001)
 
     while True:
-        for thread in enumerate():
-            print(thread.name)
         command_input = input()
         if command_input == "logout":
             peer.logout()
@@ -30,5 +28,8 @@ if __name__ == '__main__':
             peer.broadcast(input())
         elif command_input == "s":
             peer.send_udp_request(input())
+        elif command_input == "DEBUG":
+            for thread in enumerate():
+                print(thread.name)
         else:
             peer.send_p2p(command_input)
