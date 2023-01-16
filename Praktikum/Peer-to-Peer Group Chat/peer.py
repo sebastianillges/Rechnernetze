@@ -74,7 +74,6 @@ class Peer():
         sleep(1)
         self.tcp_sock.close()
         if self.CONNECTEDTOCLIENT:
-            self.CONNECTEDTOCLIENT = False
             if self.INITIATOR:
                 self.p2p_connection.close()
             elif not self.INITIATOR:
@@ -164,8 +163,6 @@ class Peer():
         self.INITIATOR = False
 
     def listen_p2p(self):
-        if not self.CONNECTEDTOCLIENT:
-            return
         while True:
                 try:
                     if self.INITIATOR:
