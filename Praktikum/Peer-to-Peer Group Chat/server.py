@@ -15,7 +15,7 @@ class ServerThread(Thread):
         self.sock = conn
         self.addr = addr
         self.server = server
-        print (f"Server thread {current_thread().ident} connected to {addr[0]} via {addr[1]}")
+        print(f"Server thread {current_thread().ident} connected to {addr[0]} via {addr[1]}")
 
     def run(self):
         while True:
@@ -59,7 +59,7 @@ class Server():
     def run(self):
         while True:
             self.sock.listen(1)
-            print('Listening ...')
+            print('Server listening ...')
             while True:
                 try:
                     self.connection, addr = self.sock.accept()
@@ -91,9 +91,9 @@ class Server():
         Server.connection_list.append(connection)
 
         # send the List of all clients to the new registered client
-        print(Server.client_list)
+        #print(Server.client_list)
         update_list_msg = Protocol_Server_Client(Server.client_list, "+").get_encoded_package()
-        print(update_list_msg)
+        #print(update_list_msg)
         connection.send(update_list_msg)
 
 

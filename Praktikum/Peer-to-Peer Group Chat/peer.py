@@ -45,7 +45,7 @@ class Peer():
         try:
             self.tcp_sock.send(paket)
             self.print_lock.acquire()
-            print(f'{self.nickname} failed to register!')
+            print(f'{self.nickname} registered!')
             self.print_lock.release()
             self.LOGGEDIN = True
         except:
@@ -123,7 +123,6 @@ class Peer():
 
     def listen_udp_request(self):
         self.udp_sock_receive.bind((self.ip, self.udp_port))
-        print(f"Bind({self.ip, self.udp_port}")
         while True:
             try:
                 data, addr = self.udp_sock_receive.recvfrom(1024)
@@ -167,12 +166,9 @@ class Peer():
         self.listen_p2p()
 
     def send_p2p(self, msg: str):
-        print(self.INITIATOR)
         if self.INITIATOR:
-            print(f"{self.nickname}: {msg}")
             self.p2p_connection.send(msg.encode('utf-8'))
         elif not self.INITIATOR:
-            print(f"{self.nickname}: {msg}")
             self.tcp_sock_p2p.send(msg.encode('utf-8'))
 
     def eval_msg(self, data):
