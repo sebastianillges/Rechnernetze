@@ -15,7 +15,7 @@ def exit_handler(self):
 
 if __name__ == '__main__':
     server_port = 20000
-    server_ip = "192.168.0.208"
+    server_ip = "127.0.0.1"
 
     peer_ip = get_pc_ip()
 
@@ -23,7 +23,7 @@ if __name__ == '__main__':
         if argv[1] == "server":
             server = Server(server_ip, server_port)
         elif argv[1] == "peer":
-            peer = Peer("peer", "127.0.0.1", 18200, 20001, server_ip, server_port)
+            peer = Peer("peer", "192.168.0.208", 18201, 20001, server_ip, server_port)
 
     #atexit.register(exit_handler(peer))
     peer.broadcast("test")
@@ -35,4 +35,6 @@ if __name__ == '__main__':
         elif command_input == "b":
             peer.broadcast(input())
         elif command_input == "s":
-            peer.send_request(input())
+            peer.send_udp_request(input())
+        else:
+            peer.send_p2p(command_input)

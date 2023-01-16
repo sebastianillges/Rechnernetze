@@ -16,6 +16,7 @@ class Peer():
     def __init__(self, nickname, ip, udp_port, tcp_port, server_ip, server_port):
         self.print_lock = threading.Lock()
         self.LOGGEDIN = False
+        self.CONNECTEDTOCLIENT = False
         self.nickname = nickname
         self.ip = ip
         self.udp_port = udp_port
@@ -23,13 +24,16 @@ class Peer():
         self.server_ip = server_ip
         self.server_port = server_port
         self.client_list = []
+        self.p2p_addr = ""
+        self.p2p_connection = socket
+        self.p2p_nickname = ""
         self.tcp_sock = socket(AF_INET, SOCK_STREAM)
+        self.tcp_sock_p2p = socket(AF_INET, SOCK_STREAM)
         self.udp_sock_receive = socket(AF_INET, SOCK_DGRAM)
         self.udp_sock_send = socket(AF_INET, SOCK_DGRAM)
-        self.udp_sock_send.settimeout(100)
         self.register()
-        self.tcp_thread = threading.Thread(target=self.listen_tcp).start()
-        self.udp_thread = threading.Thread(target=self.listen_udp).start()
+        self.tcp_thread = threading.Thread(target=self.listen_tcp_server).start()
+        self.udp_thread = threading.Thread(target=self.listen_udp_request).start()
 
     def register(self):
         self.print_lock.acquire()
@@ -83,7 +87,7 @@ class Peer():
             self.print_lock.release()
         sleep(1)
 
-    def listen_tcp(self):
+    def listen_tcp_server(self):
         while True:
             try:
                 data = self.tcp_sock.recv(1024).decode('utf-8')
@@ -99,31 +103,77 @@ class Peer():
                 print(f"{self.ip} stopped listening")
                 self.print_lock.release()
                 return
-        self.listen_tcp()
+        self.listen_tcp_server()
 
-    def listen_udp(self):
+    def send_udp_request(self, nickname):
+        # p2p initiator sends udp request to target with nickname
+        self.p2p_nickname = nickname
+        print(f"{self.nickname} sending udp request to {self.p2p_nickname}")
+        client_ip = ""
+        client_port = 0
+        for c in self.client_list:
+            if c.get_nickname() == self.p2p_nickname:
+                client_ip = str(c.get_ip())
+                client_port = int(c.get_udp_port())
+        request = Protocol_Client_Request(str(self.tcp_port), self.ip).get_encoded_package()
+        self.udp_sock_send.sendto(request, (client_ip, client_port))
+        # p2p initiator starts a tcp connection as a server
+        self.start_p2p()
+
+    def listen_udp_request(self):
         self.udp_sock_receive.bind((self.ip, self.udp_port))
         print(f"Bind({self.ip, self.udp_port}")
-        self.udp_sock_receive.settimeout(100)
         while True:
             try:
                 data, addr = self.udp_sock_receive.recvfrom(1024)
                 data = data.decode('utf-8')
-                print(f"{data} in listen_upd")
                 self.eval_msg(data)
                 break
             except socket.timeout:
                 print('Socket timed out at', asctime())
+        self.listen_udp_request()
 
+    def start_p2p(self):
+        # p2p initiator acts as server of a p2p tcp connection
+        print(f"{self.nickname} initiating tcp connection to {self.p2p_nickname}")
+        self.tcp_sock_p2p.bind((self.ip, self.tcp_port))
+        self.tcp_sock_p2p.listen(1)
+        while True:
+            try:
+                self.p2p_connection, self.p2p_addr = self.tcp_sock_p2p.accept()
+                print(f"{self.nickname} accepted incoming p2p connection from {self.p2p_nickname}")
+                break
+            except socket.timeout:
+                print('Socket timed out listening', asctime())
+        threading.Thread(target=self.listen_p2p())
+    def connect_p2p(self, addr, port):
+        self.tcp_sock_p2p.connect((str(addr), int(port)))
+
+    def listen_p2p(self):
+        while True:
+            try:
+                msg = self.tcp_sock_p2p.recv(1024).decode('utf-8')
+                print('Message received; ', msg)
+            except socket.timeout:
+                print('Socket timed out at', asctime())
+        pass
+
+    def send_p2p(self, msg: str):
+        self.p2p_connection.send(msg)
 
     def eval_msg(self, data):
-        if data[0] == "b":
+        if data[0] == "b":                                          # broadcast message
             msg = Protocol_Broadcast.get_decoded_package(data)
             self.print_lock.acquire()
             print(f"Received message from {msg[1]}: {msg[2]}")
             self.print_lock.release()
-        elif data[0] == "v":
-            print(f"{data} in eval_msg")
+        elif data[0] == "v":                                        # p2p connection setup via udp
+            msg = Protocol_Client_Request.get_decoded_package(data)
+            self.connect_p2p(msg[2], int(msg[1]))                   # msg[1] = port, msg[2] = addr
+            threading.Thread(target=self.listen_p2p())
+        elif data[0] == "s":                                        # p2p message
+            msg = Protocol_Client_Client.get_decoded_package(data)
+            self.send_p2p(msg[1])                                   # only send data portion of protocol
         else:
             operatror, list = Protocol_Server_Client.get_decoded_package(data)
             if operatror == "+":
@@ -137,21 +187,3 @@ class Peer():
                 print(f"{list[0].get_nickname()} logged out")
                 self.print_lock.release()
                 self.client_list.remove(list[0])
-
-    def send_request(self, nickname):
-        client_ip = ""
-        client_port = 0
-        for c in self.client_list:
-            if c.get_nickname() == nickname:
-                client_ip = str(c.get_ip())
-                client_port = int(c.get_udp_port())
-        request = Protocol_Client_Request(str(self.tcp_port), self.ip).get_encoded_package()
-        print(request)
-        print(f"Send to({client_ip, client_port}")
-        self.udp_sock_send.sendto(request, (client_ip, client_port))
-
-
-
-
-
-
