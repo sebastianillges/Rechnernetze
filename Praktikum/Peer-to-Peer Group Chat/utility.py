@@ -1,5 +1,12 @@
 from sys import platform
 from socket import gethostbyname_ex, getfqdn, gethostbyname, gethostname
+from client import Client
+
+def get_nickname_from_ip(ip: str, client_list):
+    for c in client_list:
+        if c.get_ip() == ip:
+            return c.get_nickname()
+    return "Unknown nickname"
 
 def get_pc_ip():
     # Windows: get own IP with gethostbyname_ex(getfqdn())[2][0]

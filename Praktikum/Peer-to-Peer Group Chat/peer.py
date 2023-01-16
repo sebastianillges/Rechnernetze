@@ -1,14 +1,13 @@
 import sys
 import threading
 from socket import socket, AF_INET, SOCK_STREAM, SOCK_DGRAM
-from time import asctime
+from time import asctime, sleep
 from protocol_client_server import Protocol_Client_Server
 from protocol_client_client import Protocol_Client_Client
 from protocol_server_client import Protocol_Server_Client
 from protocol_broadcast import Protocol_Broadcast
 from protocol_client_request import Protocol_Client_Request
-from client import Client
-from time import sleep
+from utility import get_nickname_from_ip
 
 class Peer():
 
@@ -149,7 +148,9 @@ class Peer():
         threading.Thread(target=self.listen_p2p).start()
     def connect_p2p(self, addr, port):
         self.tcp_sock_p2p.connect((str(addr), int(port)))
+        self.p2p_nickname = get_nickname_from_ip(addr, self.client_list)
         self.INITIATOR = False
+
 
     def listen_p2p(self):
         while True:
