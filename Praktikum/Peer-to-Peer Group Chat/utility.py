@@ -1,14 +1,6 @@
 from sys import platform
 from socket import gethostbyname_ex, getfqdn, gethostbyname, gethostname
 
-
-
-def num_clients_to_int(id):
-    while id.startswith("0") and len(id) > 1: id = id[1:]
-    return int(id)
-
-
-
 def get_pc_ip():
     # Windows: get own IP with gethostbyname_ex(getfqdn())[2][0]
     # Mac: get own IP with gethostbyname(gethostname())
