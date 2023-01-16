@@ -168,7 +168,10 @@ class Peer():
         self.listen_p2p()
 
     def send_p2p(self, msg: str):
-        self.p2p_connection.send(msg.encode('utf-8'))
+        if self.INITIATOR:
+            self.p2p_connection.send(msg.encode('utf-8'))
+        elif not self.INITIATOR:
+            self.tcp_sock_p2p.send(msg.encode('utf-8'))
 
     def eval_msg(self, data):
         if data[0] == "b":                                          # broadcast message
