@@ -119,7 +119,7 @@ class Peer():
         request = Protocol_Client_Request(str(self.tcp_port), self.ip).get_encoded_package()
         self.udp_sock_send.sendto(request, (client_ip, client_port))
         # p2p initiator starts a tcp connection as a server
-        threading.Thread(target=self.start_p2p()).start()
+        threading.Thread(target=self.start_p2p).start()
 
     def listen_udp_request(self):
         self.udp_sock_receive.bind((self.ip, self.udp_port))
@@ -147,7 +147,7 @@ class Peer():
                 break
             except socket.timeout:
                 print('Socket timed out listening', asctime())
-        threading.Thread(target=self.listen_p2p()).start()
+        threading.Thread(target=self.listen_p2p).start()
     def connect_p2p(self, addr, port):
         self.tcp_sock_p2p.connect((str(addr), int(port)))
         self.INITIATOR = False
