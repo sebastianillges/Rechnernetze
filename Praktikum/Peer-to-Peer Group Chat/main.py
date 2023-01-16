@@ -1,3 +1,4 @@
+from threading import enumerate
 from utility import get_pc_ip
 from server import Server
 from peer import Peer
@@ -19,6 +20,8 @@ if __name__ == '__main__':
             peer = Peer("peer", "192.168.0.208", 18201, 20001, server_ip, server_port, 21001)
 
     while True:
+        for thread in enumerate():
+            print(thread.name)
         command_input = input()
         if command_input == "logout":
             peer.logout()

@@ -32,8 +32,8 @@ class Peer():
         self.udp_sock_receive = socket(AF_INET, SOCK_DGRAM)
         self.udp_sock_send = socket(AF_INET, SOCK_DGRAM)
         self.register()
-        self.tcp_thread = threading.Thread(target=self.listen_tcp_server).start()
-        self.udp_thread = threading.Thread(target=self.listen_udp_request).start()
+        self.tcp_thread = threading.Thread(target=self.listen_tcp_server, name="thread_listen_tcp_server").start()
+        self.udp_thread = threading.Thread(target=self.listen_udp_request, name="thread_listen_udp_request").start()
 
     def register(self):
         self.print_lock.acquire()
@@ -94,7 +94,7 @@ class Peer():
                 if not data:                                        # receiving empty messages means that the socket other side closed the socket
                     sys.exit()
                 else:
-                    threading.Thread(target=self.eval_msg(data)).start()
+                    threading.Thread(target=self.eval_msg(data), name="thread_eval_server_response").start()
                     break
             except:
                 if self.LOGGEDIN:
@@ -118,7 +118,7 @@ class Peer():
         request = Protocol_Client_Request(str(self.p2p_port), self.ip).get_encoded_package()
         self.udp_sock_send.sendto(request, (client_ip, client_port))
         # p2p initiator starts a tcp connection as a server
-        threading.Thread(target=self.start_p2p).start()
+        threading.Thread(target=self.start_p2p, name="thread_start_p2p").start()
 
     def listen_udp_request(self):
         self.udp_sock_receive.bind((self.ip, self.udp_port))
@@ -146,7 +146,7 @@ class Peer():
                 break
             except socket.timeout:
                 print('Socket timed out listening', asctime())
-        threading.Thread(target=self.listen_p2p).start()
+        threading.Thread(target=self.listen_p2p, name="thread_listen_p2p").start()
     def connect_p2p(self, addr, port):
         self.tcp_sock_p2p.connect((str(addr), int(port)))
         self.p2p_nickname = get_nickname_from_ip(addr, self.client_list)
@@ -188,7 +188,7 @@ class Peer():
         elif data[0] == "v":                                        # p2p connection setup via udp
             msg = Protocol_Client_Request.get_decoded_package(data)
             self.connect_p2p(msg[2], int(msg[1]))                   # msg[1] = port, msg[2] = addr
-            threading.Thread(target=self.listen_p2p())
+            threading.Thread(target=self.listen_p2p(), name="thread_listen_p2p")
         else:
             operatror, list = Protocol_Server_Client.get_decoded_package(data)
             if operatror == "+":
