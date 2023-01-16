@@ -1,18 +1,12 @@
 import atexit
 import sys
-from socket import socket, AF_INET, SOCK_DGRAM
-from protocol_client_server import Protocol_Client_Server
-from protocol_server_client import Protocol_Server_Client
 from utility import get_pc_ip
-from client import Client
 from server import Server
 from peer import Peer
-from time import sleep
 from sys import argv
-#import atexit
 
-def exit_handler(self):
-    self.logout()
+def exit_handler(p):
+    p.logout()
 
 if __name__ == '__main__':
     server_port = 20000
@@ -26,7 +20,7 @@ if __name__ == '__main__':
         elif argv[1] == "peer":
             peer = Peer("peer", "192.168.0.208", 18201, 20001, server_ip, server_port, 21001)
 
-    #atexit.register(exit_handler(peer))
+    atexit.register(exit_handler(peer))
     peer.broadcast("test")
 
     while True:
