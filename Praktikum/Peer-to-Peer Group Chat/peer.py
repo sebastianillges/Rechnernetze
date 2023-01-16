@@ -155,7 +155,7 @@ class Peer():
         while True:
             #if self.CONNECTEDTOCLIENT:
                 try:
-                    msg = self.p2p_connection.recv(1024).decode('utf-8')
+                    msg = self.tcp_sock_p2p.recv(1024).decode('utf-8')
                     print('Message received; ', msg)
                     if not msg:
                         self.CONNECTEDTOCLIENT = False
