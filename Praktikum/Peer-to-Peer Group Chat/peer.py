@@ -120,6 +120,7 @@ class Peer():
         self.udp_sock_send.sendto(request, (client_ip, client_port))
         # p2p initiator starts a tcp connection as a server
         threading.Thread(target=self.start_p2p()).start()
+        print(threading.current_thread())
 
     def listen_udp_request(self):
         self.udp_sock_receive.bind((self.ip, self.udp_port))
