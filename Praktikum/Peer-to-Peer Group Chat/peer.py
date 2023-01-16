@@ -169,8 +169,10 @@ class Peer():
 
     def send_p2p(self, msg: str):
         if self.INITIATOR:
+            print(f"initiator send")
             self.p2p_connection.send(msg.encode('utf-8'))
         elif not self.INITIATOR:
+            print(f"target send")
             self.tcp_sock_p2p.send(msg.encode('utf-8'))
 
     def eval_msg(self, data):
