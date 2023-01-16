@@ -15,9 +15,9 @@ def exit_handler(self):
 
 if __name__ == '__main__':
     server_port = 20000
-    server_ip = "127.0.0.1"
+    server_ip = get_pc_ip()
 
-    peer_ip = get_pc_ip()
+    #peer_ip = get_pc_ip()
 
     if len(argv) > 1:
         if argv[1] == "server":
