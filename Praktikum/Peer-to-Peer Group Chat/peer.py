@@ -70,7 +70,6 @@ class Peer():
             self.print_lock.release()
         sleep(1)
         self.tcp_sock.close()
-        self.p2p_connection.close()
         self.tcp_sock_p2p.close()
 
     def broadcast(self, msg: str):
