@@ -1,6 +1,5 @@
 from sys import platform
 from socket import gethostbyname_ex, getfqdn, gethostbyname, gethostname
-from client import Client
 
 def get_nickname_from_ip(ip: str, client_list):
     for c in client_list:
