@@ -168,6 +168,7 @@ class Peer():
         self.listen_p2p()
 
     def send_p2p(self, msg: str):
+        print(self.INITIATOR)
         if self.INITIATOR:
             print(f"initiator send")
             self.p2p_connection.send(msg.encode('utf-8'))
