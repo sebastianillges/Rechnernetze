@@ -141,6 +141,7 @@ class Peer():
             try:
                 self.p2p_connection, self.p2p_addr = self.tcp_sock_p2p.accept()
                 print(f"{self.nickname} accepted incoming p2p connection from {self.p2p_nickname}")
+                self.CONNECTEDTOCLIENT = True
                 self.INITIATOR = True
                 break
             except socket.timeout:
@@ -150,6 +151,7 @@ class Peer():
         self.tcp_sock_p2p.connect((str(addr), int(port)))
         self.p2p_nickname = get_nickname_from_ip(addr, self.client_list)
         print(f"{self.nickname} connected to {self.p2p_nickname}")
+        self.CONNECTEDTOCLIENT = True
         self.INITIATOR = False
 
     def listen_p2p(self):
@@ -166,13 +168,16 @@ class Peer():
                     print(f'{self.p2p_nickname}: {msg}')
                 except socket.timeout:
                     print('Socket timed out at', asctime())
-        self.listen_p2p()
+        #self.listen_p2p()
 
     def send_p2p(self, msg: str):
-        if self.INITIATOR:
-            self.p2p_connection.send(msg.encode('utf-8'))
-        elif not self.INITIATOR:
-            self.tcp_sock_p2p.send(msg.encode('utf-8'))
+        if self.CONNECTEDTOCLIENT:
+            if self.INITIATOR:
+                self.p2p_connection.send(msg.encode('utf-8'))
+            elif not self.INITIATOR:
+                self.tcp_sock_p2p.send(msg.encode('utf-8'))
+        else:
+            print(f"Not yet connected to {self.p2p_nickname}")
 
     def eval_msg(self, data):
         if data[0] == "b":                                          # broadcast message
