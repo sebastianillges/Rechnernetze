@@ -45,12 +45,12 @@ class Peer():
         try:
             self.tcp_sock.send(paket)
             self.print_lock.acquire()
-            print('Register successfully sent')
+            print(f'{self.nickname} failed to register!')
             self.print_lock.release()
             self.LOGGEDIN = True
         except:
             self.print_lock.acquire()
-            print('Register failed')
+            print(f'{self.nickname} failed to register!')
             self.print_lock.release()
         sleep(1)
 
@@ -62,12 +62,12 @@ class Peer():
         try:
             self.tcp_sock.send(paket)
             self.print_lock.acquire()
-            print('Logout successfully sent')
+            print(f'{self.nickname}: Logout successfully sent')
             self.print_lock.release()
             self.LOGGEDIN = False
         except:
             self.print_lock.acquire()
-            print('Logout failed')
+            print(f'{self.nickname}: Logout failed')
             self.print_lock.release()
         sleep(1)
         self.tcp_sock.close()
@@ -80,11 +80,11 @@ class Peer():
         try:
             self.tcp_sock.send(paket)
             self.print_lock.acquire()
-            print('Broadcast successfully sent')
+            print(f'{self.nickname}: Broadcast successfully sent')
             self.print_lock.release()
         except:
             self.print_lock.acquire()
-            print('Broadcast failed')
+            print(f'{self.nickname}: Broadcast failed')
             self.print_lock.release()
         sleep(1)
 
@@ -161,7 +161,7 @@ class Peer():
                             break
                     elif not self.INITIATOR:
                         msg = self.tcp_sock_p2p.recv(1024).decode('utf-8')
-                    print('Message received; ', msg)
+                    print(f'{self.p2p_nickname}: {msg}')
                 except socket.timeout:
                     print('Socket timed out at', asctime())
         self.listen_p2p()
@@ -169,25 +169,22 @@ class Peer():
     def send_p2p(self, msg: str):
         print(self.INITIATOR)
         if self.INITIATOR:
-            print(f"initiator send")
+            print(f"{self.nickname}: {msg}")
             self.p2p_connection.send(msg.encode('utf-8'))
         elif not self.INITIATOR:
-            print(f"target send")
+            print(f"{self.nickname}: {msg}")
             self.tcp_sock_p2p.send(msg.encode('utf-8'))
 
     def eval_msg(self, data):
         if data[0] == "b":                                          # broadcast message
             msg = Protocol_Broadcast.get_decoded_package(data)
             self.print_lock.acquire()
-            print(f"Received message from {msg[1]}: {msg[2]}")
+            print(f"From {msg[1]} to all: {msg[2]}")
             self.print_lock.release()
         elif data[0] == "v":                                        # p2p connection setup via udp
             msg = Protocol_Client_Request.get_decoded_package(data)
             self.connect_p2p(msg[2], int(msg[1]))                   # msg[1] = port, msg[2] = addr
             threading.Thread(target=self.listen_p2p())
-        #elif data[0] == "s":                                        # p2p message
-        #    msg = Protocol_Client_Client.get_decoded_package(data)
-        #    self.send_p2p(msg[1])                                   # only send data portion of protocol
         else:
             operatror, list = Protocol_Server_Client.get_decoded_package(data)
             if operatror == "+":
