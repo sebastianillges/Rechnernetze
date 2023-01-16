@@ -1,5 +1,3 @@
-import atexit
-import sys
 from utility import get_pc_ip
 from server import Server
 from peer import Peer
@@ -19,9 +17,6 @@ if __name__ == '__main__':
             server = Server(server_ip, server_port)
         elif argv[1] == "peer":
             peer = Peer("peer", "192.168.0.208", 18201, 20001, server_ip, server_port, 21001)
-
-    #atexit.register(exit_handler(peer))
-    peer.broadcast("test")
 
     while True:
         command_input = input()

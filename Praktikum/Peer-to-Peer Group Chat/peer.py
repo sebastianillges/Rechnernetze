@@ -70,7 +70,6 @@ class Peer():
             self.print_lock.release()
         sleep(1)
         self.tcp_sock.close()
-        self.tcp_sock_p2p.close()
 
     def broadcast(self, msg: str):
         self.print_lock.acquire()
@@ -143,8 +142,6 @@ class Peer():
                 self.p2p_connection, self.p2p_addr = self.tcp_sock_p2p.accept()
                 print(f"{self.nickname} accepted incoming p2p connection from {self.p2p_nickname}")
                 self.INITIATOR = True
-                self.CONNECTEDTOCLIENT = True
-                self.udp_sock_receive.close()
                 break
             except socket.timeout:
                 print('Socket timed out listening', asctime())
@@ -153,10 +150,7 @@ class Peer():
         self.tcp_sock_p2p.connect((str(addr), int(port)))
         self.p2p_nickname = get_nickname_from_ip(addr, self.client_list)
         print(f"{self.nickname} connected to {self.p2p_nickname}")
-        self.udp_sock_receive.close()
-        self.CONNECTEDTOCLIENT = True
         self.INITIATOR = False
-
 
     def listen_p2p(self):
         while True:
