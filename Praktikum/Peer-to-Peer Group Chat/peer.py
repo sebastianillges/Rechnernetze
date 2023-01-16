@@ -143,10 +143,10 @@ class Peer():
             try:
                 self.p2p_connection, self.p2p_addr = self.tcp_sock_p2p.accept()
                 print(f"{self.nickname} accepted incoming p2p connection from {self.p2p_nickname}")
+                self.INITIATOR = True
                 break
             except socket.timeout:
                 print('Socket timed out listening', asctime())
-        self.INITIATOR = True
         threading.Thread(target=self.listen_p2p())
     def connect_p2p(self, addr, port):
         self.tcp_sock_p2p.connect((str(addr), int(port)))
