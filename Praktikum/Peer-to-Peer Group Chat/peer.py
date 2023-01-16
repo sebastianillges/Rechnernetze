@@ -13,7 +13,7 @@ from time import sleep
 
 class Peer():
 
-    def __init__(self, nickname, ip, udp_port, tcp_port, server_ip, server_port):
+    def __init__(self, nickname, ip, udp_port, tcp_port, server_ip, server_port, p2p_port):
         self.print_lock = threading.Lock()
         self.LOGGEDIN = False
         self.CONNECTEDTOCLIENT = False
@@ -24,6 +24,7 @@ class Peer():
         self.tcp_port = tcp_port
         self.server_ip = server_ip
         self.server_port = server_port
+        self.p2p_port = p2p_port
         self.client_list = []
         self.p2p_addr = ""
         self.p2p_connection = socket
@@ -116,7 +117,7 @@ class Peer():
             if c.get_nickname() == self.p2p_nickname:
                 client_ip = str(c.get_ip())
                 client_port = int(c.get_udp_port())
-        request = Protocol_Client_Request(str(self.tcp_port), self.ip).get_encoded_package()
+        request = Protocol_Client_Request(str(self.p2p_port), self.ip).get_encoded_package()
         self.udp_sock_send.sendto(request, (client_ip, client_port))
         # p2p initiator starts a tcp connection as a server
         threading.Thread(target=self.start_p2p).start()
@@ -137,7 +138,7 @@ class Peer():
     def start_p2p(self):
         # p2p initiator acts as server of a p2p tcp connection
         print(f"{self.nickname} initiating tcp connection to {self.p2p_nickname}")
-        self.tcp_sock_p2p.bind((self.ip, self.tcp_port))
+        self.tcp_sock_p2p.bind((self.ip, self.p2p_port))
         self.tcp_sock_p2p.listen(1)
         while True:
             try:
