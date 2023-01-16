@@ -103,7 +103,7 @@ class Peer():
                 self.print_lock.acquire()
                 print(f"{self.ip} stopped listening for server")
                 self.print_lock.release()
-                sys.exit()
+                return
         self.listen_tcp_server()
 
     def send_udp_request(self, nickname):
@@ -129,13 +129,8 @@ class Peer():
                 data = data.decode('utf-8')
                 self.eval_msg(data)
                 break
-            except:
-                if self.LOGGEDIN:
-                    break
-                self.print_lock.acquire()
-                print(f"{self.ip} stopped listening for udp p2p requests")
-                self.print_lock.release()
-                sys.exit()
+            except socket.timeout:
+                print('Socket timed out at', asctime())
         self.listen_udp_request()
 
     def start_p2p(self):
@@ -173,13 +168,8 @@ class Peer():
                     elif not self.INITIATOR:
                         msg = self.tcp_sock_p2p.recv(1024).decode('utf-8')
                     print(f'{self.p2p_nickname}: {msg}')
-                except:
-                    if self.LOGGEDIN:
-                        break
-                    self.print_lock.acquire()
-                    print(f"{self.ip} stopped listening to {self.p2p_nickname}")
-                    self.print_lock.release()
-                    sys.exit()
+                except socket.timeout:
+                    print('Socket timed out at', asctime())
         self.listen_p2p()
 
     def send_p2p(self, msg: str):
