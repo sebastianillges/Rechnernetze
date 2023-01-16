@@ -119,7 +119,7 @@ class Peer():
         request = Protocol_Client_Request(str(self.tcp_port), self.ip).get_encoded_package()
         self.udp_sock_send.sendto(request, (client_ip, client_port))
         # p2p initiator starts a tcp connection as a server
-        print("ficken")
+        print(f"send udp req {threading.current_thread()}")
         threading.Thread(target=self.start_p2p()).start()
 
     def listen_udp_request(self):
@@ -136,6 +136,7 @@ class Peer():
         self.listen_udp_request()
 
     def start_p2p(self):
+        print(f"send udp req {threading.current_thread()}")
         # p2p initiator acts as server of a p2p tcp connection
         print(f"{self.nickname} initiating tcp connection to {self.p2p_nickname}")
         self.tcp_sock_p2p.bind((self.ip, self.tcp_port))
@@ -150,11 +151,12 @@ class Peer():
                 print('Socket timed out listening', asctime())
         threading.Thread(target=self.listen_p2p()).start()
     def connect_p2p(self, addr, port):
+        print(f"send udp req {threading.current_thread()}")
         self.tcp_sock_p2p.connect((str(addr), int(port)))
         self.INITIATOR = False
 
     def listen_p2p(self):
-
+        print(f"send udp req {threading.current_thread()}")
         while True:
                 try:
                     if self.INITIATOR:
@@ -169,6 +171,7 @@ class Peer():
         self.listen_p2p()
 
     def send_p2p(self, msg: str):
+        print(f"send udp req {threading.current_thread()}")
         print(self.INITIATOR)
         if self.INITIATOR:
             print(f"initiator send")
