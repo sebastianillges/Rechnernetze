@@ -145,7 +145,7 @@ class Peer():
                 break
             except socket.timeout:
                 print('Socket timed out listening', asctime())
-        self.CONNECTEDTOCLIENT = True
+        #self.CONNECTEDTOCLIENT = True
         threading.Thread(target=self.listen_p2p())
     def connect_p2p(self, addr, port):
         self.tcp_sock_p2p.connect((str(addr), int(port)))
@@ -153,7 +153,7 @@ class Peer():
     def listen_p2p(self):
 
         while True:
-            if self.CONNECTEDTOCLIENT:
+            #if self.CONNECTEDTOCLIENT:
                 try:
                     msg = self.p2p_connection.recv(1024).decode('utf-8')
                     print('Message received; ', msg)
