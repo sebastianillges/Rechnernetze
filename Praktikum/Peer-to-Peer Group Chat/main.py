@@ -23,7 +23,7 @@ if __name__ == '__main__':
         if argv[1] == "server":
             server = Server(server_ip, server_port)
         elif argv[1] == "peer":
-            peer = Peer("peer", "192.168.0.208", 18201, 20001, server_ip, server_port)
+            peer = Peer("peer", "192.168.0.208", 18201, 20001, server_ip, server_port, 21001)
 
     #atexit.register(exit_handler(peer))
     peer.broadcast("test")
