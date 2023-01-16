@@ -157,10 +157,12 @@ class Peer():
                 try:
                     if self.INITIATOR:
                         msg = self.p2p_connection.recv(1024).decode('utf-8')
-                        if not msg:
-                            break
                     elif not self.INITIATOR:
                         msg = self.tcp_sock_p2p.recv(1024).decode('utf-8')
+                    if not msg:
+                        print(f"{self.p2p_nickname} closed the p2p connection")
+                        self.p2p_connection.close()
+                        return
                     print(f'{self.p2p_nickname}: {msg}')
                 except socket.timeout:
                     print('Socket timed out at', asctime())
