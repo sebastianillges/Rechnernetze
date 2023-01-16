@@ -17,6 +17,7 @@ class Peer():
         self.print_lock = threading.Lock()
         self.LOGGEDIN = False
         self.CONNECTEDTOCLIENT = False
+        self.INITIATOR = None
         self.nickname = nickname
         self.ip = ip
         self.udp_port = udp_port
@@ -145,27 +146,29 @@ class Peer():
                 break
             except socket.timeout:
                 print('Socket timed out listening', asctime())
-        #self.CONNECTEDTOCLIENT = True
+        self.INITIATOR = True
         threading.Thread(target=self.listen_p2p())
     def connect_p2p(self, addr, port):
         self.tcp_sock_p2p.connect((str(addr), int(port)))
+        self.INITIATOR = False
 
     def listen_p2p(self):
 
         while True:
-            #if self.CONNECTEDTOCLIENT:
                 try:
-                    msg = self.tcp_sock_p2p.recv(1024).decode('utf-8')
+                    if self.INITIATOR:
+                        msg = self.p2p_connection.recv(1024).decode('utf-8')
+                        if not msg:
+                            break
+                    elif not self.INITIATOR:
+                        msg = self.tcp_sock_p2p.recv(1024).decode('utf-8')
                     print('Message received; ', msg)
-                    if not msg:
-                        self.CONNECTEDTOCLIENT = False
-                        break
                 except socket.timeout:
                     print('Socket timed out at', asctime())
         self.listen_p2p()
 
     def send_p2p(self, msg: str):
-        self.p2p_connection.send(msg)
+        self.p2p_connection.send(msg.encode('utf-8'))
 
     def eval_msg(self, data):
         if data[0] == "b":                                          # broadcast message
@@ -177,9 +180,9 @@ class Peer():
             msg = Protocol_Client_Request.get_decoded_package(data)
             self.connect_p2p(msg[2], int(msg[1]))                   # msg[1] = port, msg[2] = addr
             threading.Thread(target=self.listen_p2p())
-        elif data[0] == "s":                                        # p2p message
-            msg = Protocol_Client_Client.get_decoded_package(data)
-            self.send_p2p(msg[1])                                   # only send data portion of protocol
+        #elif data[0] == "s":                                        # p2p message
+        #    msg = Protocol_Client_Client.get_decoded_package(data)
+        #    self.send_p2p(msg[1])                                   # only send data portion of protocol
         else:
             operatror, list = Protocol_Server_Client.get_decoded_package(data)
             if operatror == "+":
